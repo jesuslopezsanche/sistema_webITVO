@@ -66,8 +66,9 @@ export class AuthService {
     return createUserWithEmailAndPassword(this.auth, user.email, user.password)
       .then(r => {
         let emailLower = user.email.toLowerCase();
-        updateProfile(r.user,{displayName: user.displayName})
+        
         console.log(r.user.emailVerified)
+        
       }).catch(e=> e as string)
   }
 
