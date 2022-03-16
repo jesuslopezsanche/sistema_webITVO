@@ -1,1 +1,10 @@
-<p>login works!</p>
+<div class="login-page flex flex-col items-center" >
+    <h1 class="text-center my-5">Inicio de sesión</h1>
+    <form action="" id="loginform" class="flex flex-col max-w-[90%] my-2" [formGroup]="loginForm">
+        <input type="text" placeholder="No. Control" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="email">
+        <input type="password" placeholder="Contraseña" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="password">
+        <a routerLink="/auth/sign-up" class="py-2 text-sm"><p>¿No tienes cuenta? <strong>Crea una cuenta</strong></p></a>
+        <a routerLink="/auth/forgot-password" class="py-2 text-sm"><p><strong>Olvidé mi contraseña</strong></p></a>
+        <button class="bg-blue-400 font-bold tracking-wider">Acceder</button>
+    </form>
+</div>

@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -7,6 +8,7 @@ import { AppComponent } from './app.component';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
+import { getAuth, provideAuth } from '@angular/fire/auth';
 
 
 @NgModule({
@@ -17,9 +19,10 @@ import { environment } from 'src/environments/environment';
     BrowserModule,
     AppRoutingModule,
     provideFirebaseApp( () => initializeApp(environment.firebase)),
-    provideFirestore( () => getFirestore())
+    provideFirestore( () => getFirestore()),
+    provideAuth( () => getAuth())
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
