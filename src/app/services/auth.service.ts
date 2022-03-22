@@ -95,8 +95,6 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    console.log(!!this.auth.currentUser);
-
     return !!this.auth.currentUser
   }
 

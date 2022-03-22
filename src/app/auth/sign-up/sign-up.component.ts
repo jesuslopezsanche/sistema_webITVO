@@ -45,7 +45,7 @@ export class SignUpComponent implements OnInit {
         this.router.navigateByUrl('auth/login')
       }
       else{
-        alert(r)
+        alert()
       }
     })
     

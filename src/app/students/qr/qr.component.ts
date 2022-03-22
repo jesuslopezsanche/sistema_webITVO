@@ -9,8 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QrComponent implements OnInit {
 pendingSessions: DocumentData[] | null = null
+  constructor(private sessionService: SessionService) { }
 
   ngOnInit(): void {
+    this.sessionService.getAllfromStudent().subscribe( e => {
+      this.pendingSessions = e
+    })
   }
 
 }
