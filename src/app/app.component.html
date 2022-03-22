@@ -1,2 +1,2 @@
-<div class="header"></div>
+<div class="header" *ngIf="authService.isLoggedIn()" (click)='authService.logout()'>logout</div>
 <router-outlet></router-outlet>

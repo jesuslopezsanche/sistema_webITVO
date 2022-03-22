@@ -1,13 +1,18 @@
 import { Router } from '@angular/router';
-import { Observable, of, switchMap, take } from 'rxjs';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, authState, updateProfile, sendPasswordResetEmail } from '@angular/fire/auth';
+import { map, Observable, of, switchMap, take } from 'rxjs';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, authState, updateProfile, sendPasswordResetEmail, onAuthStateChanged } from '@angular/fire/auth';
 import { Injectable } from '@angular/core';
 import firebase from "firebase/compat/app";
-import { doc, docData, Firestore } from '@angular/fire/firestore';
+import { doc, docData, Firestore, setDoc, getDoc } from '@angular/fire/firestore';
+export interface Roles {
+  student?: Boolean
+  admin?: Boolean
+}
 export interface User {
   uid: string
   email: string
-  displayName: string
+  displayName?: string
+  roles?: Roles
 }
 @Injectable({
   providedIn: 'root'
@@ -18,47 +23,34 @@ export class AuthService {
   user$: Observable<User | null>
   constructor(private auth: Auth, private router: Router, private firestore: Firestore) {
     this.userLoggedIn = false
-    this.user$ = of(null)
-    authState(this.auth).subscribe((u) => {
+    this.user$ = authState(this.auth).pipe(
+      switchMap(user => {
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user))
+          return docData(doc(firestore, `users/${user?.uid}`)) as Observable<User>
 
-      if (u) {
-
-        this.user$ = of({
-          displayName: u?.displayName,
-          email: u.email,
-          uid: u.uid
-
-        }) as Observable<User>
-        this.router.navigateByUrl(this.redirectUrl)
-        console.log({ u });
-        let docu: any
-        docData(doc(this.firestore, `users/${u.uid}`)).subscribe(e => {
-          console.log(e);
-          docu = e
-
-        })
-        console.log({ docu });
-        return
+        }
+        localStorage.removeItem('user')
+        return of(null)
 
       }
-      this.user$ = of(null)
+      )
+    )
+    this.user$.subscribe(user => {
+      console.log({ user });
+      if (user)
+        this.redirect(user)
+      this.router.navigate([this.redirectUrl])
 
     }
     )
-    console.log(this.user$);
-
-    this.auth.onAuthStateChanged((loggedUser) => {
-      if (loggedUser) {
-        this.userLoggedIn = true
-        this.user$ = of({ uid: loggedUser.uid, email: loggedUser.email!, displayName: loggedUser.displayName! })
-        this.userLoggedIn = true
-        this.router.navigateByUrl(this.redirectUrl)
-
-      } else {
-        this.userLoggedIn = false
-        this.user$ = of(null)
-      }
-    })
+  }
+  redirect(user: User | null): void {
+    if (user?.roles?.admin) {
+      this.redirectUrl = 'dashboard'
+      return
+    }
+    this.redirectUrl = 'students'
   }
 
   signUp(user: any): Promise<any> {
@@ -66,7 +58,10 @@ export class AuthService {
       .then(r => {
         let emailLower = user.email.toLowerCase();
 
-        console.log(r.user.emailVerified)
+        return this.updateUserData({
+          uid: r.user.uid,
+          email: r.user.email!
+        })
 
       }).catch(e => e as string)
   }
@@ -76,9 +71,7 @@ export class AuthService {
     try {
 
 
-      console.log(user);
       let login = await signInWithEmailAndPassword(this.auth, user.email, user.password)
-      console.log(login.user);
       this.userLoggedIn = true
       this.router.navigate(['students'])
     } catch (error) {
@@ -88,11 +81,11 @@ export class AuthService {
     }
 
   }
-  async resetPassword(email:string) {
+  async resetPassword(email: string) {
     let response = await sendPasswordResetEmail(this.auth, email)
     console.log(response)
     this.router.navigate(['auth'])
-    
+
   }
 
   logout() {
@@ -102,6 +95,18 @@ export class AuthService {
   }
 
   isLoggedIn() {
+    console.log(!!this.auth.currentUser);
+
     return !!this.auth.currentUser
+  }
+
+  updateUserData(user: User) {
+    const userRef = doc(this.firestore, `users/${user.uid}`)
+    const data: User = {
+      uid: user.uid,
+      email: user.email,
+      roles: { student: true }
+    }
+    return setDoc(userRef, data, { merge: true })
   }
 }
