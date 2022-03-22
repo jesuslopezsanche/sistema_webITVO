@@ -17,10 +17,10 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     provideFirebaseApp( () => initializeApp(environment.firebase)),
     provideFirestore( () => getFirestore()),
-    provideAuth( () => getAuth())
+    provideAuth( () => getAuth()),
+    AppRoutingModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

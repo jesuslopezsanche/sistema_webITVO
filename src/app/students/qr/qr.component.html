@@ -1,0 +1,4 @@
+<div class="pending" *ngIf="pendingSessions?.length; else noPendingSessions"></div>
+<ng-template id="no-pending-sessions" #noPendingSessions>
+    No hay sesiones pendientes
+</ng-template>
