@@ -6,14 +6,14 @@ import { Observable, take, map, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {
+export class AdminGuard implements CanActivate {
+  constructor(private authService: AuthService, private router: Router){
 
   }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.checkLoggedIn(state.url) && this.checkStudentRole();
+    return this.checkLoggedIn(state.url) && this.isAdmin();
   }
   checkLoggedIn(url: string) {
     if (this.authService.isLoggedIn()) return true
@@ -23,15 +23,15 @@ export class AuthGuard implements CanActivate {
     return false
 
   }
-  checkStudentRole() {
+  isAdmin(){
     return this.authService.user$.pipe(
       take(1),
-      map(user => user?.roles!.student && !user?.roles!.admin ? true : false),
-      tap(isStudent => {
-        if (!isStudent)
-          this.router.navigate(['dashboard'])
+      map(user => user?.roles!.admin ? true : false),
+      tap(isAdmin => {
+        if (!isAdmin)
+          this.router.navigate(['auth'])
       })
     )
   }
-
+  
 }

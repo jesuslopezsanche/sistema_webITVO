@@ -46,8 +46,12 @@ export class AuthService {
     )
   }
   redirect(user: User | null): void {
+    console.log(user?.roles?.admin);
+    
     if (user?.roles?.admin) {
-      this.redirectUrl = 'dashboard'
+      this.redirectUrl = this.redirectUrl?this.redirectUrl:'dashboard'
+      console.log(this.redirectUrl);
+      
       return
     }
     this.redirectUrl = 'students'
