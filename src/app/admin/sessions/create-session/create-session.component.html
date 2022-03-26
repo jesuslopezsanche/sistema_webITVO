@@ -1,0 +1,14 @@
+<form (ngSubmit)="createSession()" [formGroup]="sessionForm" class="flex flex-col">
+    <input type="date" placeholder="" formControlName="date">
+    <input type="text" placeholder="grupo" formControlName="group">
+    <input type="text" placeholder="area" formControlName="area">
+    <div class="flex flex-col">
+        <label for="start-time">Hora de entrada</label>
+        <input id="start-time" type="text" placeholder="" formControlName="startTime">
+    </div>
+    <div class="flex flex-col">
+
+        <label for="end-time">Hora de salida</label>
+        <input id="end-time" type="datetime" placeholder="" formControlName="endTime">
+    </div>
+</form>
