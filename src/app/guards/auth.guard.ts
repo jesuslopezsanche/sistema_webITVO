@@ -28,6 +28,7 @@ export class AuthGuard implements CanActivate {
       take(1),
       map(user => user?.roles!.student && !user?.roles!.admin ? true : false),
       tap(isStudent => {
+        console.log("isadmin" ,isStudent);
         if (!isStudent)
           this.router.navigate(['dashboard'])
       })

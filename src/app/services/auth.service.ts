@@ -49,9 +49,7 @@ export class AuthService {
     console.log(user?.roles?.admin);
     
     if (user?.roles?.admin) {
-      this.redirectUrl = this.redirectUrl?this.redirectUrl:'dashboard'
-      console.log(this.redirectUrl);
-      
+      this.redirectUrl = this.redirectUrl?this.redirectUrl:'dashboard/sessions'
       return
     }
     this.redirectUrl = 'students'
@@ -77,6 +75,8 @@ export class AuthService {
 
       let login = await signInWithEmailAndPassword(this.auth, user.email, user.password)
       this.userLoggedIn = true
+      console.log({login});
+      
       this.router.navigate(['students'])
     } catch (error) {
       console.log('error', error);
