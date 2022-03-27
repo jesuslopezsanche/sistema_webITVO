@@ -1,5 +1,5 @@
 import { DocumentData } from 'rxfire/firestore/interfaces';
-import { SessionService } from './../../services/session.service';
+import { SessionService } from './../../services/features/session.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
