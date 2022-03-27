@@ -1,4 +1,4 @@
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth/auth.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 

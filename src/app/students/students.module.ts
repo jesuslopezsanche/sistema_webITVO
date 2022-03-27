@@ -1,9 +1,9 @@
-import { SessionService } from './../services/session.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { StudentsRoutingModule } from './students-routing.module';
 import { QrComponent } from './qr/qr.component';
+import { SessionService } from '../services/features/session.service';
 
 
 @NgModule({

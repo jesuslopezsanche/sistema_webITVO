@@ -25,10 +25,8 @@ const routes: Routes = [{
     },
     {
       path: 'areas',
-      children: [
-        { path: '', component: AreasComponent },
-        { path: '**', redirectTo: '', pathMatch: "full" },
-      ]
+      loadChildren: ()=> import('./areas/areas.module').then(e => e.AreasModule)
+      
     },
     {
       path: 'groups',

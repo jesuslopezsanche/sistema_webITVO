@@ -1,4 +1,4 @@
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth/auth.service'
 import { Firestore, getDocs, where, collection, CollectionReference, query } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { from, Observable, of, switchMap, take } from 'rxjs';

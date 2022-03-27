@@ -15,7 +15,6 @@ import { GroupsComponent } from './groups/groups.component';
   declarations: [
     DashboardComponent,
     SessionsComponent,
-    AreasComponent,
     MaterialsComponent,
     CreateSessionComponent,
     GroupsComponent
