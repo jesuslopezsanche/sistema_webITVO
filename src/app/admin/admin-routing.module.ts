@@ -32,10 +32,7 @@ const routes: Routes = [{
     },
     {
       path: 'materials',
-      children: [
-        { path: '', component: MaterialsComponent },
-        { path: '**', redirectTo: '', pathMatch: "full" },
-      ]
+      loadChildren: ()=> import('./materials/materials.module').then(e => e.MaterialsModule)
     },
     { path: '**', redirectTo: 'sessions/index', pathMatch: 'full' },
   ]

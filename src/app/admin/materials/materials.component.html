@@ -1,17 +1,28 @@
-<div class="min-h-full py-5">
-    <h1 class="text-center text-lg">Lista de materiales</h1>
+<div class="min-h-full py-5 flex flex-col items-center">
+    <h1 class="text-center text-lg">Lista de Materiales</h1>
     <div class="flex justify-center">
         <button routerLink="create" class="bg-emerald-500 text-zinc-100 font-bold tracking-wider px-4 py-1 rounded my-3">Agregar</button>
     </div>
-    <table class="min-w-full">
-        <thead>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>status</th>
-        </thead>
-        <tbody>
+    <div class="min-w-full flex justify-center">
 
-        </tbody>
-    </table>
-
+        <table class="text-center p-8 rounded-sm bg-zinc-100 m-2 min-w-[80%]">
+            <thead class="border-b-2 border-gray-300 border-dotted">
+                <tr>
+                    
+                    <th class="py-2 pt-4">Nombre</th>
+                    <th class="py-2 pt-4">descripción</th>
+                    <th class="py-2 pt-4">status</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr *ngFor="let material of materials" (click)="edit(material)" class="cursor-pointer border-b-2 border-zinc-300 hover:bg-zinc-200">
+                    <td class="py-1">{{material['name']}}</td>
+                    <td class="py-1">{{material['description']}}</td>
+                    <td class="py-1">{{material['status']}}</td>
+                </tr>
+                
+            </tbody>
+        </table>
+        
+    </div>
 </div>
