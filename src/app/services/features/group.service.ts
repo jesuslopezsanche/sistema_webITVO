@@ -12,10 +12,7 @@ export interface Group{
   providedIn: 'root'
 })
 export class GroupService {
-  deleteById(id: string ) {
-    return from(deleteDoc(doc(this.colRef, id)))
-  }
-
+ 
   colRef: CollectionReference
   groups: Observable<QueryDocumentSnapshot<DocumentData> | null>
 
@@ -49,5 +46,9 @@ export class GroupService {
       return { id: e.id, ...e.data() } as unknown as Group
     }
     )
+  }
+  
+  deleteById(id: string ) {
+    return from(deleteDoc(doc(this.colRef, id)))
   }
 }

@@ -13,7 +13,6 @@ import { CreateSessionComponent } from './sessions/create-session/create-session
   declarations: [
     DashboardComponent,
     SessionsComponent,
-    MaterialsComponent,
     CreateSessionComponent,
   ],
   imports: [
