@@ -1,0 +1,10 @@
+<div class="relative flex px-4 py-4 bg-emerald-500 text-zinc-200 font-bold tracking-widest text-lg rounded-t">
+    <button (click)="back()" class="absolute bottom-0 left-0 top-0 mx-4">go back</button>
+    <h1 class="grow text-center">{{action}} grupo</h1>
+</div>
+<form (ngSubmit)='handleSubmit()' [formGroup]="form" class="flex flex-col items-center justify-center py-4">
+    <input type="text" placeholder="Nombre del grupo" formControlName='name' class="min-w-[80%] rounded px-2 py-1">
+    <input type="checkbox" formControlName='status' class="m-5 min-h-[3rem]">
+    <button class="bg-emerald-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
+    <a *ngIf="action == 'Editar'" (click)='deleteRegister()' class="bg-red-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm mt-2">Eliminar</a>
+</form>
