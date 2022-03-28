@@ -1,5 +1,7 @@
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { switchMap, Observable, of, map } from 'rxjs';
+import { AreaService, Area } from './../../../services/features/area.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
@@ -11,23 +13,88 @@ import { Location } from '@angular/common';
 export class FormComponent implements OnInit {
   action = 'Crear'
   form: FormGroup
+  selectedId: string | null = ''
+  currArea: Observable<Area | null>;
 
-  constructor(private location: Location, private router : Router, private fb: FormBuilder) {
+  constructor(
+    private location: Location,
+    private router: Router,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private areaService: AreaService
+  ) {
     this.form = fb.group({
-      name:[''],
-      status:[true],
+      name: ['', Validators.required],
+      status: [true],
     })
+    this.currArea = of(null)
 
-   }
+  }
 
   ngOnInit(): void {
+    this.selectedId = this.route.snapshot.paramMap.get('id')
+    if (this.selectedId) {
+      this.areaService.getById(this.selectedId).
+        then(e => {
+          this.form.setValue({
+            name: e.name,
+            status: e.status
+          })
+        })
+        this.action = 'Editar'
+    }
+
   }
 
   back() {
     this.router.navigate(['/dashboard/areas'])
   }
-  handleSubmit(){
-
+  handleSubmit() {
+    if (this.form.valid) {
+      let area = {
+        name: this.form.get('name')?.value,
+        status: this.form.get('status')?.value,
+      }
+      if (this.action == "Crear") {
+        
+        this.areaService.create(area).subscribe(e => {
+          if (e.id) {
+            
+            alert("Area creada Exitosamente!")
+            this.back()
+            return
+          }
+          alert("Error: Ocurrió un problema al intentar crear el registro, por favor, intente más tarde")
+      return    
+        })
+      }
+      if (this.action == "Editar") {
+        
+        this.areaService.update(this.selectedId!, area).subscribe(e => {
+          if (e == null) {
+            
+            alert("Area actualizada!")
+            this.back()
+            return
+          }
+          alert("Error: Ocurrió un problema al intentar actualizar el registro, por favor, intente más tarde")
+          return    
+        })
+      }
+      
+    }
+    
+  }
+  
+  
+  deleteRegister(){
+    this.areaService.deleteById(this.selectedId!).subscribe(e =>{
+      if (e == null) {
+        alert("Se eliminó el registro!")
+        this.back()
+        
+      }
+    })
   }
 
 }
