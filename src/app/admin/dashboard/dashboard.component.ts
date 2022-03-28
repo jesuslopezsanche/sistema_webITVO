@@ -1,5 +1,4 @@
-import { DocumentData } from 'rxfire/firestore/interfaces';
-import { SessionService } from './../../services/features/session.service';
+import { AuthService } from './../../services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,15 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  sessions : DocumentData[] | null= null
-  constructor(private sessionService: SessionService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.sessionService.getAll().subscribe(r => {
-    console.log(r);
-      
-      this.sessions=r
-    })
   }
 
 }

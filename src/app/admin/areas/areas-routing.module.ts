@@ -7,7 +7,7 @@ const routes: Routes = [
   {path: '', children:[
     {path:'', component: AreasComponent},
     {path:'create', component: FormComponent},
-    {path:'edit', component: FormComponent},
+    {path:'edit/:id', component: FormComponent},
     {path:'**', redirectTo: '', pathMatch: 'full'},
   ]}
 ];

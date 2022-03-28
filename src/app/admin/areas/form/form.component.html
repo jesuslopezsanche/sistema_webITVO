@@ -6,4 +6,5 @@
     <input type="text" placeholder="Nombre del área" formControlName='name' class="min-w-[80%] rounded px-2 py-1">
     <input type="checkbox" formControlName='status' class="m-5 min-h-[3rem]">
     <button class="bg-emerald-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
+    <a *ngIf="action == 'Editar'" (click)='deleteRegister()' class="bg-red-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm mt-2">Eliminar</a>
 </form>
