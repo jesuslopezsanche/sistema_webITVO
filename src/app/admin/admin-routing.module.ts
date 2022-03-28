@@ -1,6 +1,4 @@
-import { GroupsComponent } from './groups/groups.component';
 import { MaterialsComponent } from './materials/materials.component';
-import { AreasComponent } from './areas/areas.component';
 import { CreateSessionComponent } from './sessions/create-session/create-session.component';
 import { SessionsComponent } from './sessions/sessions.component';
 import { AdminGuard } from './../guards/admin.guard';
@@ -30,10 +28,7 @@ const routes: Routes = [{
     },
     {
       path: 'groups',
-      children: [
-        { path: '', component: GroupsComponent },
-        { path: '**', redirectTo: '', pathMatch: "full" },
-      ]
+      loadChildren: ()=> import('./groups/groups.module').then(e => e.GroupsModule)
     },
     {
       path: 'materials',

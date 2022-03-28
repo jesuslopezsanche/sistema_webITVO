@@ -1,16 +1,26 @@
-<div class="min-h-full py-5">
-    <h1 class="text-center text-lg">Lista de Grupos</h1>
+<div class="min-h-full py-5 flex flex-col items-center">
+    <h1 class="text-center text-lg">Lista de grupos</h1>
     <div class="flex justify-center">
         <button routerLink="create" class="bg-emerald-500 text-zinc-100 font-bold tracking-wider px-4 py-1 rounded my-3">Agregar</button>
     </div>
-    <table class="min-w-full">
-        <thead>
-            <th>Nombre</th>
-            <th>status</th>
-        </thead>
-        <tbody>
+    <div class="min-w-full flex justify-center">
 
-        </tbody>
-    </table>
-
+        <table class="text-center p-8 rounded-sm bg-zinc-100 m-2 min-w-[80%]">
+            <thead class="border-b-2 border-gray-300 border-dotted">
+                <tr>
+                    
+                    <th class="py-2 pt-4">Nombre</th>
+                    <th>status</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr *ngFor="let group of groups" (click)="edit(group)" class="cursor-pointer border-b-2 border-zinc-300 hover:bg-zinc-200">
+                    <td class="py-1">{{group['name']}}</td>
+                    <td class="py-1">{{group['status']}}</td>
+                </tr>
+                
+            </tbody>
+        </table>
+        
+    </div>
 </div>

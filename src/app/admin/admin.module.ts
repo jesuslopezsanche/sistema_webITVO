@@ -5,10 +5,8 @@ import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SessionsComponent } from './sessions/sessions.component';
-import { AreasComponent } from './areas/areas.component';
 import { MaterialsComponent } from './materials/materials.component';
 import { CreateSessionComponent } from './sessions/create-session/create-session.component';
-import { GroupsComponent } from './groups/groups.component';
 
 
 @NgModule({
@@ -17,7 +15,6 @@ import { GroupsComponent } from './groups/groups.component';
     SessionsComponent,
     MaterialsComponent,
     CreateSessionComponent,
-    GroupsComponent
   ],
   imports: [
     CommonModule,
