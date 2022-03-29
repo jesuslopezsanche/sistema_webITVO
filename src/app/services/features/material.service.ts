@@ -4,9 +4,11 @@ import { from, of, Observable } from 'rxjs';
 
 export interface Material{
   id?:string,
+  serialNumber: string,
   name: string,
-  description: string,
-  status: boolean
+  quantity: number,
+  brand: string,
+  status: 'Excelente' | 'Bueno' | 'Regular'| 'Malo'
 }
 
 @Injectable({

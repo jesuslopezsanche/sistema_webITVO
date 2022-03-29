@@ -1,5 +1,5 @@
 <div class="min-h-full py-5 flex flex-col items-center">
-    <h1 class="text-center text-lg">Lista de Materiales</h1>
+    <h1 class="text-center text-lg">Inventario</h1>
     <div class="flex justify-center">
         <button routerLink="create" class="bg-emerald-500 text-zinc-100 font-bold tracking-wider px-4 py-1 rounded my-3">Agregar</button>
     </div>
@@ -9,15 +9,19 @@
             <thead class="border-b-2 border-gray-300 border-dotted">
                 <tr>
                     
+                    <th class="py-2 pt-4">Número de serie</th>
                     <th class="py-2 pt-4">Nombre</th>
-                    <th class="py-2 pt-4">descripción</th>
-                    <th class="py-2 pt-4">status</th>
+                    <th class="py-2 pt-4">Cantidad</th>
+                    <th class="py-2 pt-4">Marca</th>
+                    <th class="py-2 pt-4">estado</th>
                 </tr>
             </thead>
             <tbody class="text-center">
                 <tr *ngFor="let material of materials" (click)="edit(material)" class="cursor-pointer border-b-2 border-zinc-300 hover:bg-zinc-200">
+                    <td class="py-1">{{material['serialNumber']}}</td>
                     <td class="py-1">{{material['name']}}</td>
-                    <td class="py-1">{{material['description']}}</td>
+                    <td class="py-1">{{material['quantity']}}</td>
+                    <td class="py-1">{{material['brand']}}</td>
                     <td class="py-1">{{material['status']}}</td>
                 </tr>
                 
