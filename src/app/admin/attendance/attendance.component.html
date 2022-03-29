@@ -1,0 +1,34 @@
+<div class="min-h-full py-5 flex flex-col items-center">
+    <h1 class="text-center text-lg">Lista de asistencia</h1>
+    <div class="flex justify-center">
+        <input type="date" name="startDate" id="startDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm">
+        <input type="date" name="endDate" id="endDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm">
+        <button class="mx-2 bg-zinc-100 px-2 py1 rounded-sm">Consultar</button>
+    </div>
+    <div class="min-w-full flex justify-center">
+
+        <table class="text-center p-8 rounded-sm bg-zinc-100 m-2 min-w-[80%]">
+            <thead class="border-b-2 border-gray-300 border-dotted">
+                <tr>
+                    
+                    <th class="py-2 pt-4">Número de control</th>
+                    <th class="py-2 pt-4">Nombre</th>
+                    <th class="py-2 pt-4">Carrera</th>
+                    <th class="py-2 pt-4">Entrada</th>
+                    <th class="py-2 pt-4">Salida</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr *ngFor="let attendant of attendants" (click)="edit(attendant)" class="cursor-pointer border-b-2 border-zinc-300 hover:bg-zinc-200">
+                    <td class="py-1">{{attendant['serialNumber']}}</td>
+                    <td class="py-1">{{attendant['name']}}</td>
+                    <td class="py-1">{{attendant['quantity']}}</td>
+                    <td class="py-1">{{attendant['brand']}}</td>
+                    <td class="py-1">{{attendant['status']}}</td>
+                </tr>
+                
+            </tbody>
+        </table>
+        
+    </div>
+</div>

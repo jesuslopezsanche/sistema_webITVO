@@ -24,7 +24,7 @@ const routes: Routes = [
         {path: 'inventario', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'top-herramientas', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'mantenimiento', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
-        {path: 'asistencia', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
+        {path: 'asistencia', loadChildren: () => import('./attendance/attendance.module').then(e => e.AttendanceModule)},
         { path: '**', redirectTo: 'inventario', pathMatch: 'full' },
       ]},
       {
