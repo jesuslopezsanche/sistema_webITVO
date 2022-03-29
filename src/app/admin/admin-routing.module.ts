@@ -13,7 +13,12 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     component: DashboardComponent,
     children: [
-      { path: ':id',
+      {
+        path: 'areas',
+        loadChildren: () => import('./areas/areas.module').then(e => e.AreasModule)
+    
+      },
+      { path: ':areaId',
       component: AreaNavigationComponent,
        children: [
         {path: 'inventario', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
@@ -30,11 +35,7 @@ const routes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
-  {
-    path: 'areas',
-    loadChildren: () => import('./areas/areas.module').then(e => e.AreasModule)
-
-  },
+  
 
 ];
 

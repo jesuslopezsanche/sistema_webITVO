@@ -12,12 +12,12 @@ export class AreaNavigationComponent implements OnInit {
   constructor(public route : ActivatedRoute) { }
   @Input() id:Observable<string> = of('')
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')
+    const id = this.route.snapshot.paramMap.get('areaId')
     console.log({aranav: id});
     
     this.route.paramMap.subscribe(e=>
       {
-        console.log({paramap: e.get('id')})
+        console.log({paramap: e.get('areaId')})
       })
   }
   ngOnChanges(){
