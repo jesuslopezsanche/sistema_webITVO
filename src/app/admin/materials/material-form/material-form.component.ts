@@ -25,9 +25,11 @@ export class MaterialFormComponent implements OnInit {
     private material: MaterialService
   ) {
     this.form = this.fb.group({
+      serialNumber: ['', Validators.required],
       name: ['', Validators.required],
-      description: ['', Validators.required],
-      status: [true],
+      quantity: ['', Validators.required],
+      brand: ['', Validators.required],
+      status: ['Excelente', Validators.required],
     })
     this.currElement = of(null)
 
@@ -39,8 +41,10 @@ export class MaterialFormComponent implements OnInit {
       this.material.getById(this.selectedId).
         then(e => {
           this.form.setValue({
+            serialNumber: e.serialNumber,
             name: e.name,
-            description: e.description,
+            quantity: e.quantity,
+            brand: e.brand,
             status: e.status
           })
         })
@@ -50,13 +54,15 @@ export class MaterialFormComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/dashboard/materials'])
+    this.router.navigate(['../'], { relativeTo: this.route })
   }
   handleSubmit() {
     if (this.form.valid) {
       let newData = {
+        serialNumber: this.form.get('serialNumber')?.value,
         name: this.form.get('name')?.value,
-        description: this.form.get('description')?.value,
+        quantity: this.form.get('quantity')?.value,
+        brand: this.form.get('brand')?.value,
         status: this.form.get('status')?.value,
       }
       if (this.action == "Crear") {
@@ -88,12 +94,12 @@ export class MaterialFormComponent implements OnInit {
 
     }
   }
-  deleteRegister(){
-    this.material.deleteById(this.selectedId!).subscribe(e =>{
+  deleteRegister() {
+    this.material.deleteById(this.selectedId!).subscribe(e => {
       if (e == null) {
         alert("Se eliminó el registro!")
         this.back()
-        
+
       }
     })
   }

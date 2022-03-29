@@ -3,11 +3,17 @@
     <h1 class="grow text-center">{{action}} material</h1>
 </div>
 <form (ngSubmit)='handleSubmit()' [formGroup]="form" class="flex flex-col items-center justify-center py-6">
-    <input type="text" placeholder="Nombre del material" formControlName='name' class="min-w-[80%] rounded px-2 py-1">
-    <textarea name="" id="" rows="5" placeholder="Descripción" formControlName='description'
-        class="min-w-[80%] rounded px-2 py-1 mt-2"></textarea>
-    <input type="checkbox" formControlName='status' class="m-5 min-h-[3rem]">
-    <button class="bg-emerald-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
+    <input type="text" placeholder="Número de serie" formControlName='serialNumber' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="text" placeholder="Nombre del material" formControlName='name' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="number" placeholder="Cantidad" formControlName='quantity' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="text" placeholder="Marca" formControlName='brand' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <select name="status" id="status" formControlName='status' class="min-w-[80%] rounded px-2 py-1 my-1 bg-zinc-100">
+        <option value="Malo">Malo</option>
+        <option value="Regular">Regular</option>
+        <option value="Bueno">Bueno</option>
+        <option value="Excelente">Excelente</option>
+    </select>
+    <button class="bg-emerald-500 mt-4 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
     <a *ngIf="action == 'Editar'" (click)='deleteRegister()'
         class="bg-red-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm mt-2">Eliminar</a>
 </form>
