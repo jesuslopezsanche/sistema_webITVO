@@ -5,12 +5,14 @@ import { CommonModule } from '@angular/common';
 
 import { MaterialsRoutingModule } from './materials-routing.module';
 import { MaterialFormComponent } from './material-form/material-form.component';
+import { TopMaterialsComponent } from './top-materials/top-materials.component';
 
 
 @NgModule({
   declarations: [
     MaterialFormComponent,
-    MaterialsComponent
+    MaterialsComponent,
+    TopMaterialsComponent
   ],
   imports: [
     CommonModule,
