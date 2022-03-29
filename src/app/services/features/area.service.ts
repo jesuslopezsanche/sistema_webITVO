@@ -1,7 +1,7 @@
 import { from, Observable, of } from 'rxjs';
 import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, collection, getDocs, collectionData, query, setDoc, doc, addDoc, docData, getDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
-export interface Area { name: any; status: any; }
+export interface Area { id?:string, name: any; status: any; }
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,7 @@ export class AreaService {
     let areas = getDocs(query(this.colRef))
       .then(e => e.docs)
       .then(e => e.map(el => {
-        return { id: el.id, ...el.data() }
+        return { id: el.id, ...el.data() } as unknown as Area
       }))
 
     return from(areas)
