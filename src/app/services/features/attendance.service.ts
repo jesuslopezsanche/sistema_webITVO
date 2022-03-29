@@ -1,22 +1,31 @@
+import { Area } from './area.service';
 import { AuthService } from '../auth/auth.service'
-import { Firestore, getDocs, where, collection, CollectionReference, query } from '@angular/fire/firestore';
+import { Firestore, DocumentData, QueryDocumentSnapshot, getDocs, where, collection, CollectionReference, query, addDoc } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { from, Observable, of, switchMap, take } from 'rxjs';
-import { DocumentData, QueryDocumentSnapshot } from 'rxfire/firestore/interfaces';
+
+export interface Attendance{
+  id?: Area,
+  area: Area,
+  controlNumber: string,
+  name: string,
+  carrer: string,
+  startDateTime:string,
+  endDateTime: string,
+}
 
 @Injectable({
   providedIn: 'root'
 })
-export class SessionService {
+export class AttendanceService {
   colRef: CollectionReference
   sessions: Observable<QueryDocumentSnapshot<DocumentData> | null>
   uid: string | undefined;
   constructor(private firestore: Firestore, private authService: AuthService) {
-    this.colRef = collection(this.firestore, 'sessions')
+    this.colRef = collection(this.firestore, 'attendance')
     this.uid = ''
     this.authService.user$.subscribe(r => this.uid = r?.uid)
     this.sessions = of(null)
-
 
   }
   getAll() {
@@ -41,5 +50,8 @@ export class SessionService {
     )
 
     return sessions
+  }
+  create(area: Attendance) {
+    return from(addDoc(this.colRef, area).then(e => e))
   }
 }

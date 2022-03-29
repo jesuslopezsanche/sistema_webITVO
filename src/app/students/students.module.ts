@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { StudentsRoutingModule } from './students-routing.module';
 import { QrComponent } from './qr/qr.component';
-import { SessionService } from '../services/features/session.service';
+import { AttendanceService } from '../services/features/attendance.service';
 
 
 @NgModule({
@@ -15,7 +15,7 @@ import { SessionService } from '../services/features/session.service';
     StudentsRoutingModule
   ],
   providers:[
-    SessionService
+    AttendanceService
   ]
 })
 export class StudentsModule { }

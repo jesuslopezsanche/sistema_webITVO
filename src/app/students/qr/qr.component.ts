@@ -1,4 +1,4 @@
-import { SessionService } from './../../services/features/session.service';
+import { AttendanceService } from '../../services/features/attendance.service';
 import { DocumentData } from 'rxfire/firestore/interfaces';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QrComponent implements OnInit {
 pendingSessions: DocumentData[] | null = null
-  constructor(private sessionService: SessionService) { }
+  constructor(private sessionService: AttendanceService) { }
 
   ngOnInit(): void {
     this.sessionService.getAllfromStudent().subscribe( e => {

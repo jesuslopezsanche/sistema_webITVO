@@ -1,4 +1,4 @@
-import { SessionService } from './../../services/features/session.service';
+import { AttendanceService } from '../../services/features/attendance.service';
 import { DocumentData } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
 
@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 export class SessionsComponent implements OnInit {
 
   sessions : DocumentData[] | null= null
-  constructor(private sessionService: SessionService) { }
+  constructor(private sessionService: AttendanceService) { }
 
   ngOnInit(): void {
     this.sessionService.getAll().subscribe(r => {
