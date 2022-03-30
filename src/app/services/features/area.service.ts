@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { from, Observable, of } from 'rxjs';
 import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, collection, getDocs, collectionData, query, setDoc, doc, addDoc, docData, getDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
@@ -13,8 +14,9 @@ export class AreaService {
 
   colRef: CollectionReference
   areas: Observable<QueryDocumentSnapshot<DocumentData> | null>
+  selectedArea:string = ''
 
-  constructor(private firestore: Firestore) {
+  constructor(private firestore: Firestore, private route:ActivatedRoute) {
     this.colRef = collection(firestore, 'areas')
     this.areas = of(null)
   }
@@ -44,6 +46,9 @@ export class AreaService {
       return { id: e.id, ...e.data() } as unknown as Area
     }
     )
+  }
+  setSelectedArea(areaId: string){
+    this.selectedArea = areaId
   }
 
 }
