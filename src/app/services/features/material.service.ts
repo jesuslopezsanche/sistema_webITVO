@@ -1,14 +1,21 @@
+import { AreaService } from './area.service';
 import { Injectable } from '@angular/core';
-import { addDoc, collection, CollectionReference, deleteDoc, doc, DocumentData, Firestore, getDoc, getDocs, query, QueryDocumentSnapshot, updateDoc } from '@angular/fire/firestore';
+import {
+  addDoc, collection, CollectionReference,
+  deleteDoc, doc, DocumentData, Firestore,
+  getDoc, getDocs, query, QueryDocumentSnapshot,
+  updateDoc, where
+} from '@angular/fire/firestore';
 import { from, of, Observable } from 'rxjs';
 
-export interface Material{
-  id?:string,
+export interface Material {
+  id?: string,
+  Area?: string,
   serialNumber: string,
   name: string,
   quantity: number,
   brand: string,
-  status: 'Excelente' | 'Bueno' | 'Regular'| 'Malo'
+  status: 'Excelente' | 'Bueno' | 'Regular' | 'Malo'
 }
 
 @Injectable({
@@ -18,23 +25,26 @@ export class MaterialService {
   colRef: CollectionReference
   materials: Observable<QueryDocumentSnapshot<DocumentData> | null>
 
-  constructor(private firestore: Firestore) {
+  constructor(private firestore: Firestore, private areaService: AreaService) {
     this.colRef = collection(firestore, 'materials')
     this.materials = of(null)
   }
 
-  create(group: Material ) {
-    return from(addDoc(this.colRef, group).then(e => e))
+  create(data: Material) {
+    data = { Area: this.areaService.selectedArea, ...data }
+    return from(addDoc(this.colRef, data).then(e => e))
   }
-  update(id:string ,material: Material) {
-    return from(updateDoc(doc(this.colRef, id),{
+  update(id: string, material: Material) {
+    return from(updateDoc(doc(this.colRef, id), {
       name: material.name,
       status: material.status,
-    },))
+    }))
   }
 
   getAll() {
-    let materials = getDocs(query(this.colRef))
+    console.log("getting inventory for", this.areaService.selectedArea);
+
+    let materials = getDocs(query(this.colRef, where('Area', '==', this.areaService.selectedArea)))
       .then(e => e.docs)
       .then(e => e.map(el => {
         return { id: el.id, ...el.data() }
@@ -49,8 +59,8 @@ export class MaterialService {
     }
     )
   }
-  
-  deleteById(id: string ) {
+
+  deleteById(id: string) {
     return from(deleteDoc(doc(this.colRef, id)))
   }
 }

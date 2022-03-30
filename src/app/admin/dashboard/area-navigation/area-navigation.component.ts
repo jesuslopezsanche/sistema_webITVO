@@ -1,4 +1,5 @@
-import { Observable, of } from 'rxjs';
+import { AreaService } from './../../../services/features/area.service';
+import { Observable, of, map, take, switchMap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -9,21 +10,20 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class AreaNavigationComponent implements OnInit {
 
-  constructor(public route : ActivatedRoute) { }
-  @Input() id:Observable<string> = of('')
+  constructor(public route: ActivatedRoute, private areaService: AreaService) { }
+  @Input() id: Observable<string> = of('')
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('areaId')
-    console.log({aranav: id});
-    
-    this.route.paramMap.subscribe(e=>
-      {
-        console.log({paramap: e.get('areaId')})
-      })
+    let id = this.route.paramMap.subscribe(
+      e => {
+        let areaId=e.get('areaId')!
+        this.areaService.setSelectedArea(areaId)
+        return of(e.get('areaId'))
+      }
+    )
   }
-  ngOnChanges(){
-    console.log({id:this.id});
-    
-    
+  ngOnChanges() {
+
+
   }
 
 }
