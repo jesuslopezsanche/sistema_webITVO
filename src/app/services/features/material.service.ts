@@ -35,8 +35,12 @@ export class MaterialService {
     return from(addDoc(this.colRef, data).then(e => e))
   }
   update(id: string, material: Material) {
+    // let updatedData =
     return from(updateDoc(doc(this.colRef, id), {
       name: material.name,
+      brand: material.brand,
+      quantity: material.quantity,
+      serialNumber: material.serialNumber,
       status: material.status,
     }))
   }
