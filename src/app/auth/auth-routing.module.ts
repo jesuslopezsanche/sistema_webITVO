@@ -1,3 +1,4 @@
+import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { LoginComponent } from './login/login.component';
@@ -7,7 +8,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-
+    component:AuthLayoutComponent,
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignUpComponent },
