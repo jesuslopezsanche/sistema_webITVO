@@ -1,3 +1,4 @@
+import { AdminSignupComponent } from './admin-signup/admin-signup.component';
 import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
@@ -12,6 +13,7 @@ const routes: Routes = [
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignUpComponent },
+      { path: 'admin-sign-up', component: AdminSignupComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: '**', redirectTo: 'login', pathMatch: 'full' }
     ]

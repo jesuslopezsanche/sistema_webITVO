@@ -1,7 +1,23 @@
-<div class="min-h-screen">
-<div class="header" *ngIf="authService.isLoggedIn()" (click)='authService.logout()'>logout</div>
+<div class="min-h-screen max-h-screen flex flex-col">
+    <div class="header flex justify-between min-w-full p-6">
+        <img routerLink="/students" src="assets/itvo.ico" class="h-[15vh] min-h-[100px] max-h-[150px] cursor-pointer" alt="">
+        <div class="options flex flex-col justify-center">
+            <h1 class="font-medium leading-tight text-4xl mt-0 mb-2 text-blue-600 mx-10 text-center">
+                Sistema de acceso a laboratorios <br>ITVO
+            </h1>
+        </div>
+        <div class="options flex flex-col justify-center">
+            <a *ngIf="authService.isLoggedIn()" (click)="authService.logout()" class="cursor-pointer text-red-400 font-bold">
+                Salir
+            </a>
+
+
+        </div>
+    </div>
+    <!-- <div class="main-area min-h-[100%] h-[100%] grow flex tems-stretch min-w-full justifjustify-items-stretch "> -->
 
     <router-outlet></router-outlet>
+    <!-- </div> -->
 
-    
+
 </div>

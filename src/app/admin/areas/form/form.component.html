@@ -3,8 +3,14 @@
     <h1 class="grow text-center">{{action}} área</h1>
 </div>
 <form (ngSubmit)='handleSubmit()' [formGroup]="form" class="flex flex-col items-center justify-center py-4">
-    <input type="text" placeholder="Nombre del área" formControlName='name' class="min-w-[80%] rounded px-2 py-1">
-    <input type="checkbox" formControlName='status' class="m-5 min-h-[3rem]">
+    <input type="text" placeholder="Nombre del área" formControlName='name' class="min-w-[80%] rounded px-2 py-1 my-2">
+    <input type="text" placeholder="Responsable del área" formControlName='supervisor' class="min-w-[80%] rounded px-2 py-1 my-2">
+    <input type="text" placeholder="Carrera" formControlName='career' class="min-w-[80%] rounded px-2 py-1 my-2">
+    <input type="number" placeholder="Capacidad" formControlName='capacity' class="min-w-[80%] rounded px-2 py-1 my-2">
+    <div class="form-input flex flex-col items-center m-2 min-h-[3rem] cursor-pointer">
+        <input id="status" type="checkbox" formControlName='status' class="m-1">
+        <label for="status" class="cursor-pointer text-gray-500">Activo</label>
+    </div>
     <button class="bg-emerald-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
     <a *ngIf="action == 'Editar'" (click)='deleteRegister()' class="bg-red-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm mt-2">Eliminar</a>
 </form>

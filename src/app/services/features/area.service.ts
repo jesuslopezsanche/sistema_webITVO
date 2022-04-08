@@ -2,21 +2,28 @@ import { ActivatedRoute } from '@angular/router';
 import { from, Observable, of } from 'rxjs';
 import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, collection, getDocs, collectionData, query, setDoc, doc, addDoc, docData, getDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
-export interface Area { id?:string, name: any; status: any; }
+export interface Area {
+  id?: string;
+  name: string;
+  status: any;
+  capacity: number
+  supervisor: number
+  career: number
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AreaService {
-  deleteById(id: string ) {
+  deleteById(id: string) {
     return from(deleteDoc(doc(this.colRef, id)))
   }
 
   colRef: CollectionReference
   areas: Observable<QueryDocumentSnapshot<DocumentData> | null>
-  selectedArea:string = ''
+  selectedArea: string = ''
 
-  constructor(private firestore: Firestore, private route:ActivatedRoute) {
+  constructor(private firestore: Firestore, private route: ActivatedRoute) {
     this.colRef = collection(firestore, 'areas')
     this.areas = of(null)
   }
@@ -24,11 +31,14 @@ export class AreaService {
   create(area: Area) {
     return from(addDoc(this.colRef, area).then(e => e))
   }
-  update(id:string ,area: Area) {
-    return from(updateDoc(doc(this.colRef, id),{
+  update(id: string, area: Area) {
+    return from(updateDoc(doc(this.colRef, id), {
       name: area.name,
       status: area.status,
-    },))
+      capacity: area.capacity,
+      career: area.career,
+      supervisor: area.supervisor,
+    }))
   }
 
   getAll() {
@@ -47,7 +57,7 @@ export class AreaService {
     }
     )
   }
-  setSelectedArea(areaId: string){
+  setSelectedArea(areaId: string) {
     this.selectedArea = areaId
   }
 

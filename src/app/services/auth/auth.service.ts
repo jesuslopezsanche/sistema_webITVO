@@ -10,6 +10,8 @@ export interface Roles {
 }
 export interface User {
   uid: string
+  name?: string
+  area?: string
   email: string
   displayName?: string
   roles?: Roles
@@ -37,19 +39,22 @@ export class AuthService {
       )
     )
     this.user$.subscribe(user => {
-      console.log({ user });
-      if (user)
+      console.log({ user }, router);
+
+      if (user) {
+
         this.redirect(user)
-      this.router.navigate([this.redirectUrl])
+        this.router.navigate([this.redirectUrl])
+      }
 
     }
     )
   }
   redirect(user: User | null): void {
     console.log(user?.roles?.admin);
-    
+
     if (user?.roles?.admin) {
-      this.redirectUrl = this.redirectUrl?this.redirectUrl:'dashboard'
+      this.redirectUrl = this.redirectUrl ? this.redirectUrl : 'dashboard'
       return
     }
     this.redirectUrl = 'students'
@@ -60,10 +65,14 @@ export class AuthService {
       .then(r => {
         let emailLower = user.email.toLowerCase();
 
-        return this.updateUserData({
+        let newUser = {
           uid: r.user.uid,
-          email: r.user.email!
-        })
+          email: r.user.email!,
+          name: user.name ? user.name : null,
+          area: user.area ? user.area : null,
+        }
+
+        return this.updateUserData(newUser)
 
       }).catch(e => e as string)
   }
@@ -75,8 +84,8 @@ export class AuthService {
 
       let login = await signInWithEmailAndPassword(this.auth, user.email, user.password)
       this.userLoggedIn = true
-      console.log({login});
-      
+      console.log({ login });
+
       this.router.navigate(['students'])
     } catch (error) {
       console.log('error', error);
@@ -108,6 +117,17 @@ export class AuthService {
       uid: user.uid,
       email: user.email,
       roles: { student: true }
+    }
+    if (!!user.name && !!user.area) {
+      const adminData: User = {
+        uid: user.uid,
+        name: user.name,
+        email: user.email,
+        roles: { student: true, admin: true }
+      }
+
+      return setDoc(userRef, adminData, { merge: true })
+
     }
     return setDoc(userRef, data, { merge: true })
   }
