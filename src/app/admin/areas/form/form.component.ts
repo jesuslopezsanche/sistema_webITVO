@@ -25,6 +25,9 @@ export class FormComponent implements OnInit {
   ) {
     this.form = fb.group({
       name: ['', Validators.required],
+      capacity: ['', Validators.min(0)],
+      career: ['', Validators.required],
+      supervisor: ['', Validators.required],
       status: [true],
     })
     this.currArea = of(null)
@@ -38,7 +41,10 @@ export class FormComponent implements OnInit {
         then(e => {
           this.form.setValue({
             name: e.name,
-            status: e.status
+            capacity: e.capacity? e.capacity : '' ,
+            career: e.capacity? e.career : '' ,
+            supervisor: e.capacity? e.supervisor : '' ,
+            status: e.status,
           })
         })
         this.action = 'Editar'
@@ -54,6 +60,9 @@ export class FormComponent implements OnInit {
       let area = {
         name: this.form.get('name')?.value,
         status: this.form.get('status')?.value,
+        capacity: this.form.get('capacity')?.value,
+        career: this.form.get('career')?.value,
+        supervisor: this.form.get('supervisor')?.value,
       }
       if (this.action == "Crear") {
         

@@ -8,10 +8,9 @@
     <input type="number" placeholder="Cantidad" formControlName='quantity' class="min-w-[80%] rounded px-2 py-1 my-1">
     <input type="text" placeholder="Marca" formControlName='brand' class="min-w-[80%] rounded px-2 py-1 my-1">
     <select name="status" id="status" formControlName='status' class="min-w-[80%] rounded px-2 py-1 my-1 bg-zinc-100">
-        <option value="Malo">Malo</option>
-        <option value="Regular">Regular</option>
-        <option value="Bueno">Bueno</option>
-        <option value="Excelente">Excelente</option>
+        <option value="Mantenimiento">En Mantenimiento</option>
+        <option value="Rentado">Rentado</option>
+        <option value="Disponible">Disponible</option>
     </select>
     <button class="bg-emerald-500 mt-4 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
     <a *ngIf="action == 'Editar'" (click)='deleteRegister()'

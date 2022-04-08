@@ -1,18 +1,20 @@
 import { Router } from '@angular/router';
 import { AuthService } from './../../services/auth/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html',
-  styleUrls: ['./sign-up.component.css']
+  selector: 'app-admin-signup',
+  templateUrl: './admin-signup.component.html',
+  styleUrls: ['./admin-signup.component.css']
 })
-export class SignUpComponent implements OnInit {
+export class AdminSignupComponent implements OnInit {
   signUpForm: FormGroup
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router : Router) {
     this.signUpForm = fb.group({
+      name:['', [Validators.required]],
+      area:['', [Validators.required]],
       email:['', [Validators.required, Validators.email, Validators.pattern('^[A-Za-z0-9._%+-]+@voaxaca.tecnm.mx$')]],
       password:['', [Validators.required, Validators.minLength(6)]],
       passwordConfirm:['', [Validators.required, Validators.minLength(6)]]
@@ -38,6 +40,8 @@ export class SignUpComponent implements OnInit {
 
     console.log(this.signUpForm.controls);
     let user = {
+      name: this.signUpForm.get('name')?.value,
+      area: this.signUpForm.get('area')?.value,
       email: this.signUpForm.get('email')?.value,
       password: password?.value,
     }
