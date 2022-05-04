@@ -44,6 +44,8 @@ export class AuthService {
       if (user) {
 
         this.redirect(user)
+        let curr = this.router.url
+        if (curr != '/monitor')
         this.router.navigate([this.redirectUrl])
       }
 
@@ -89,7 +91,7 @@ export class AuthService {
       this.router.navigate(['students'])
     } catch (error) {
       console.log('error', error);
-      return error
+      return {error}
 
     }
 

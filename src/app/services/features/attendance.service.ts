@@ -32,18 +32,15 @@ export class AttendanceService {
     let sessions = getDocs(query(this.colRef, where('status', '!=', 'closed')))
     .then( e =>e.docs)
     .then(e => e.map(el => el.data()))
-    console.log('aaaaaaaaaa', sessions);
-
-
     return from(sessions)
   }
   getAllfromStudent() {
-
+    
     let sessions = this.authService.user$.pipe(
       switchMap(async user => {
         if (user)
-          return await (await getDocs(query(this.colRef, where('student.uid', '==', this.uid), where('status', '!=', 'closed')))).docs
-            .map(e => e.data())
+        return await (await getDocs(query(this.colRef, where('student.uid', '==', this.uid), where('status', '!=', 'closed')))).docs
+        .map(e => e.data())
         return null
       }
       )

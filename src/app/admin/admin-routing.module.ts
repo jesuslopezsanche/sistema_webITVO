@@ -16,25 +16,28 @@ const routes: Routes = [
       {
         path: 'areas',
         loadChildren: () => import('./areas/areas.module').then(e => e.AreasModule)
-    
+        
       },
+      {
+        path: 'groups',
+        loadChildren: () => import('./groups/groups.module').then(e => e.GroupsModule)
+      },
+
       { path: ':areaId',
       component: AreaNavigationComponent,
-       children: [
+      children: [
         {path: 'inventario', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'top-herramientas', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'mantenimiento', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'asistencia', loadChildren: () => import('./attendance/attendance.module').then(e => e.AttendanceModule)},
         { path: '**', redirectTo: 'inventario', pathMatch: 'full' },
       ]},
-      {
-        path: 'groups',
-        loadChildren: () => import('./groups/groups.module').then(e => e.GroupsModule)
-      },
-
+      
+      
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ]
   },
+  // {path: 'monitor', loadChildren: () => import('./monitor/monitor.module').then(e => e.MonitorModule)},
   
 
 ];

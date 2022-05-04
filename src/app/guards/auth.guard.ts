@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+
     return this.checkLoggedIn(state.url) && this.checkStudentRole();
   }
   checkLoggedIn(url: string) {
@@ -28,7 +29,7 @@ export class AuthGuard implements CanActivate {
       take(1),
       map(user => user?.roles!.student && !user?.roles!.admin ? true : false),
       tap(isStudent => {
-        console.log("isadmin" ,isStudent);
+        console.log("isadmin" ,!isStudent);
         if (!isStudent)
           this.router.navigate(['dashboard'])
       })
