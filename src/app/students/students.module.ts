@@ -1,3 +1,4 @@
+import { QRCodeModule } from 'angularx-qrcode';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -12,7 +13,8 @@ import { AttendanceService } from '../services/features/attendance.service';
   ],
   imports: [
     CommonModule,
-    StudentsRoutingModule
+    StudentsRoutingModule,
+    QRCodeModule
   ],
   providers:[
     AttendanceService

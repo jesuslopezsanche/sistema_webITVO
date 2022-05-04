@@ -35,18 +35,21 @@ export class LoginComponent implements OnInit {
     )
   }
 
-  login() {
+  async login() {
     if (this.loginForm.invalid)
-      return alert('revise los datos ingresados')
+      return alert('Debes proveer tu email y contraseña.')
 
     let user = {
       email: this.loginForm.get('email')?.value,
       password: this.loginForm.get('password')?.value,
     }
-    console.log(user);
-
-    let loged = this.authService.loginEmail(user)
-    console.log(loged);
+    let logged = await this.authService.loginEmail(user)
+    if (logged?.error) {
+      if (logged.error.code == 'auth/wrong-password') {
+        alert('Verifica tus datos')
+      }
+      
+    }
 
     if (this.authService.redirectUrl) {
       this.router.navigateByUrl(this.authService.redirectUrl)

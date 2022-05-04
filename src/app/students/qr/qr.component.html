@@ -1,4 +1,8 @@
-<div class="pending" *ngIf="pendingSessions?.length; else noPendingSessions"></div>
-<ng-template id="no-pending-sessions" #noPendingSessions>
+<div class="pending flex items-center justify-center min-w-full" *ngIf="user; else noNetwork">
+    <qrcode [qrdata]="user?.uid!" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+
+</div>
+<ng-template id="no-pending-sessions" #noNetwork>
     No hay sesiones pendientes
+
 </ng-template>
