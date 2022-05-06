@@ -1,3 +1,4 @@
+import { AttendanceService } from './../../services/features/attendance.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MonitorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private attendanceService: AttendanceService) { }
 
   ngOnInit(): void {
+  }
+  registerStudentAttendance(result: string) {
+    alert('succes: ' + result)
+    this.attendanceService.registerStudent(result)
+
   }
 
 }
