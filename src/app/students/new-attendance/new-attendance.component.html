@@ -1,0 +1,35 @@
+<div class="flex flex-col">
+    <form action="" (ngSubmit)="newAttendance()" [formGroup]="attendanceForm" class="flex flex-col items-center">
+
+        <select name="area" id="area" class="py-2 px-5 my-2 min-w-[250px]" (change)="selectecAreaChanged($event)" formControlName="area">
+            <option value="">Selecciona una opción</option>
+            <option *ngFor="let area of areas" [ngValue]="area" >{{area.name}}</option>
+        </select>
+        <input type="text" class="py-2 px-5 my-2 min-w-[250px]" placeholder="Número de control" formControlName="controlNumber">
+        <div class="materials pt-5" *ngIf="materials">
+            <p>Selecciona los materiales que ocuparás, de la siguiente lista</p>
+            
+            <select name="materials" id="materials" class="py-2 px-5 my-2 min-w-[250px]" (change)="addToList($event)" formControlName="material">
+                <option value="">Selecciona una opción</option>
+                <option *ngFor="let material of materials" [ngValue]="material" >{{material.name}}</option>
+            </select>
+            
+            <div *ngIf="selectedMaterials.length > 0" class="material-list">
+                <p>Lista de materiales</p>
+                <div class="flex flex-col">
+                    <div class="selected-material my-1 flex justify-evenly" *ngFor="let material of selectedMaterials">
+                        <div class="name">
+                            {{material.name}}
+                        </div>
+                        <div class="actions">
+                            <div class="quit cursor-pointer rounded-full bg-red-500 px-3 text-center font-bolder text-gray-200" (click)="deleteFromList(material)">
+                                x
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="rounded bg-emerald-500 text-gray-200 py-2 px-5 my-2">Siguiente</button>
+    </form>
+</div>

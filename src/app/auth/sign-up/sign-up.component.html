@@ -1,5 +1,6 @@
 <div class="login-page flex flex-col items-center" >
-    <h1 class="text-center my-5">Registro de nuevo usuario</h1>
+    <h1 class="text-center my-5 text-lg font-bold">Registro de nuevo usuario</h1>
+    <h2 class="text-center my-3 text-sm italic">Registrate usando tu email institucional</h2>
     <form action="" id="loginform" class="flex flex-col max-w-[90%] my-2" [formGroup]="signUpForm" (ngSubmit)="register()">
         <input type="text" placeholder="Email" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="email">
         <input type="password" placeholder="Contraseña" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="password">

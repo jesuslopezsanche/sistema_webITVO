@@ -13,7 +13,9 @@ export class AdminGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.checkLoggedIn(state.url) && this.isAdmin();
+      console.log('adminGuard');
+      
+    return this.checkLoggedIn(state.url) && this.isAdmin() ;
   }
   checkLoggedIn(url: string) {
     if (this.authService.isLoggedIn()) return true
@@ -29,9 +31,11 @@ export class AdminGuard implements CanActivate {
       map(user => user?.roles!.admin ? true : false),
       tap(isAdmin => {
         if (!isAdmin)
-          this.router.navigate(['auth'])
+          this.router.navigate(['students'])
       })
     )
   }
+
+  
   
 }

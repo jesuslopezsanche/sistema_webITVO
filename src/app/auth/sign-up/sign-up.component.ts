@@ -11,24 +11,25 @@ import { Component, OnInit } from '@angular/core';
 export class SignUpComponent implements OnInit {
   signUpForm: FormGroup
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router : Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.signUpForm = fb.group({
-      email:['', [Validators.required, Validators.email, Validators.pattern('^[A-Za-z0-9._%+-]+@voaxaca.tecnm.mx$')]],
-      password:['', [Validators.required, Validators.minLength(6)]],
-      passwordConfirm:['', [Validators.required, Validators.minLength(6)]]
+      email: ['', [Validators.required, Validators.email, Validators.pattern('^[A-Za-z0-9._%+-]+@voaxaca.tecnm.mx$')]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      passwordConfirm: ['', [Validators.required, Validators.minLength(6)]]
     })
-   }
+  }
 
   ngOnInit(): void {
   }
-  register() {
+  async register() {
 
     let password = this.signUpForm.get('password')!
     let confirmPassword = this.signUpForm.get('passwordConfirm')
-
+    console.log(this.signUpForm.get('email'));
+    
     if (this.signUpForm.get('email')?.hasError('pattern')) {
       return alert('Email inválido, asegúrate de usar tu correo institucional')
-      
+
     }
     if (password?.value == "" ||
       (password?.value != confirmPassword?.value) ||
@@ -41,18 +42,31 @@ export class SignUpComponent implements OnInit {
       email: this.signUpForm.get('email')?.value,
       password: password?.value,
     }
-    
-    this.authService.signUp(user).then(r =>{
+
+    await this.authService.signUp(user).then(async r => {
       if (r) {
-        console.log(r);
-        
-        this.router.navigateByUrl('auth/login')
+        console.log({r});
+        let logged = await this.authService.loginEmail(user)
+        if (logged?.error) {
+          if (logged.error.code == 'auth/wrong-password') {
+            alert('Verifica tus datos')
+          }
+
+        }
+
+        // if (this.authService.redirectUrl) {
+        //   this.router.navigateByUrl(this.authService.redirectUrl)
+        // } else {
+        //   this.router.navigate(['auth'])
+        // }
+
+        // this.router.navigateByUrl('auth/login')
       }
-      else{
-        alert()
+      else {
+        alert('Ocurrió un error en el registro, por favor ponte en contacto con el administrador')
       }
     })
-    
+
 
   }
 

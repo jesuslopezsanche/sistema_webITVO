@@ -1,3 +1,4 @@
+import { Attendance } from './../../services/features/attendance.service';
 import { tap } from 'rxjs';
 import { AttendanceService } from '../../services/features/attendance.service';
 import { DocumentData } from 'rxfire/firestore/interfaces';
@@ -12,32 +13,46 @@ import { AuthService, User } from 'src/app/services/auth/auth.service';
 export class QrComponent implements OnInit {
   pendingSessions: DocumentData[] | null = null
   public user: User | null = null;
+  public attendance: Attendance | null = null;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService,  private attendanceService : AttendanceService) {
     this.user = null
   }
 
   ngOnInit(): void {
-    this.authService.user$.subscribe(e => {
-
-      this.user = e
-      console.log({ us: this.user });
-      this.startCheckingSession()
-     
+    if(this.attendanceService.activeAttendance){
+      console.log("activealready");
+      this.attendance = this.attendanceService.activeAttendance
+      return
+    }
+    this.attendanceService.getActiveFromStudent().subscribe(res =>{
+      if(res?.length != 0){
+        console.log('activesesh', res);
+        
+        this.attendance = res![0]
+      }
     })
-    console.log({ us: this.user });
+    this.startCheckingSession()
+    // console.log({ us: this.user });
   }
 
   startCheckingSession(){
-    let maxTries = 5
+    let maxTries = 3
     let tries = 0
-    let interval = 10000
+    let interval = 15000
     console.log({maxTries, tries});
     let checksessionTimeout: any = setInterval(() => {
       console.log({maxTries, tries});
       if (tries < maxTries) {
         tries++
         console.log('is active?????');
+        this.attendanceService.getActiveFromStudent().subscribe(res =>{
+          if(res?.length != 0){
+            console.log('activesesh', res);
+            
+            this.attendance = res![0]
+          }
+        })
         
       }else{
         

@@ -6,9 +6,9 @@ export interface Area {
   id?: string;
   name: string;
   status: any;
-  capacity: number
-  supervisor: number
-  career: number
+  capacity?: number
+  supervisor?: number
+  career?: number
 }
 
 @Injectable({

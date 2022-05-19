@@ -15,7 +15,16 @@ export interface User {
   email: string
   displayName?: string
   roles?: Roles
+  profile?: string
 }
+export interface Profile {
+  uid: string
+  name: string
+  controlNumber: string
+  career: string
+  semester: number
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,7 +68,7 @@ export class AuthService {
       this.redirectUrl = this.redirectUrl ? this.redirectUrl : 'dashboard'
       return
     }
-    this.redirectUrl = 'students'
+    this.redirectUrl = this.redirectUrl ? this.redirectUrl :'students'
   }
 
   signUp(user: any): Promise<any> {
@@ -73,6 +82,8 @@ export class AuthService {
           name: user.name ? user.name : null,
           area: user.area ? user.area : null,
         }
+        console.log({newUser});
+        
 
         return this.updateUserData(newUser)
 
@@ -88,7 +99,7 @@ export class AuthService {
       this.userLoggedIn = true
       console.log({ login });
 
-      this.router.navigate(['students'])
+      // this.router.navigate(['students'])
     } catch (error) {
       console.log('error', error);
       return {error}
@@ -113,8 +124,10 @@ export class AuthService {
     return !!this.auth.currentUser
   }
 
-  updateUserData(user: User) {
-    const userRef = doc(this.firestore, `users/${user.uid}`)
+  async updateUserData(user: User) {
+    console.log('creating user data', user);
+    
+    const userRef = await doc(this.firestore, `users/${user.uid}`)
     const data: User = {
       uid: user.uid,
       email: user.email,
@@ -132,5 +145,17 @@ export class AuthService {
 
     }
     return setDoc(userRef, data, { merge: true })
+  }
+  updateStudentProfile(profile : Profile){
+    let profileRef = doc(this.firestore, `profile/${profile.uid}`)
+    
+    setDoc(profileRef, profile, {merge: true})
+    
+  }
+  getStudentProfile(){
+    return <Observable<Profile>>this.user$.pipe(switchMap(u => {
+      return docData(doc(this.firestore, `profile/${u!.uid}`))
+    }))
+
   }
 }

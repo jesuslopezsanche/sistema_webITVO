@@ -51,7 +51,7 @@ export class MaterialService {
     let materials = getDocs(query(this.colRef, where('Area', '==', this.areaService.selectedArea)))
       .then(e => e.docs)
       .then(e => e.map(el => {
-        return { id: el.id, ...el.data() }
+        return { id: el.id, ...el.data() } as unknown as Material
       }))
 
     return from(materials)
