@@ -13,8 +13,26 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      console.log('authguard');
+      console.log(state.url);
+      console.log(route);
+      if (!this.checkLoggedIn(state.url) ) {
+        console.log('not logged');
+        
+        return false
+      }
+      if (state.url !== '/students/profile') {
+        console.log('check if registered');
 
-    return this.checkLoggedIn(state.url) && this.checkStudentRole();
+        this.registrationCompleted(state.url).subscribe(rc => {console.log({rc});
+        })
+        return this.checkStudentRole() && this.registrationCompleted(state.url)
+      }
+      return this.checkStudentRole()
+     
+      
+      // return true
+
   }
   checkLoggedIn(url: string) {
     if (this.authService.isLoggedIn()) return true
@@ -28,12 +46,20 @@ export class AuthGuard implements CanActivate {
     return this.authService.user$.pipe(
       take(1),
       map(user => user?.roles!.student && !user?.roles!.admin ? true : false),
-      tap(isStudent => {
-        console.log("isadmin" ,!isStudent);
-        if (!isStudent)
-          this.router.navigate(['dashboard'])
-      })
+      tap(isStudent => !isStudent? this.router.navigate(['dashboard']):true)
     )
+  }
+  registrationCompleted(url :string){
+    return this.authService.getStudentProfile().pipe(
+      take(1),
+      map(profile => {
+        console.log(profile);
+        console.log(!!profile);
+        return !!profile
+      }),
+      tap(rc => !rc? this.router.navigate(['/students','profile']): false)
+    )
+    
   }
 
 }

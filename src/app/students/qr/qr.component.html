@@ -1,8 +1,19 @@
-<div class="pending flex items-center justify-center min-w-full" *ngIf="user; else noNetwork">
-    <qrcode [qrdata]="user?.uid!" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+<div class="pending flex items-center flex-col justify-center min-w-full" *ngIf="attendance; else noNetwork">
+    <qrcode [qrdata]="attendance?.id!" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+    <div class="status">
+        <div *ngIf="attendance.status == 'open'" class="open rounded bg-green-400 py-2 px-5">
+            Sesión Lista
+        </div>
+        <div *ngIf="attendance.status == 'registered'" class="open rounded bg-yellow-400 py-2 px-5">
+            Sesión Activa
+        </div>
+    </div>
+    <div *ngIf="attendance.status == 'closed'" class="open bg-green-400">
+        cerrada
+    </div>
 
 </div>
 <ng-template id="no-pending-sessions" #noNetwork>
-    No hay sesiones pendientes
+    No hay sesiones activas
 
 </ng-template>

@@ -7,14 +7,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./monitor.component.css']
 })
 export class MonitorComponent implements OnInit {
-
+  scannerEnabled = true
   constructor(private attendanceService: AttendanceService) { }
 
   ngOnInit(): void {
   }
-  registerStudentAttendance(result: string) {
+  async registerStudentAttendance(result: string) {
+    // this.scannerEnabled = false
+    let res = await this.attendanceService.registerAttendance(result)
     alert('succes: ' + result)
-    this.attendanceService.registerStudent(result)
+    console.log({res});
+    // this.scannerEnabled=true
+      
+    
 
   }
 

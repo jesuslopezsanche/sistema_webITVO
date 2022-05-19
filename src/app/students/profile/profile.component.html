@@ -1,0 +1,31 @@
+<div class="min-w-full flex flex-col items-center gap-y-5 min-h-[100%]">
+    <h1 class="font-bold text-xl">Datos del estudiante</h1>
+    <form action="" id="loginform" class="flex flex-col max-w-[90%] my-2" [formGroup]="profileForm" (ngSubmit)="updateStudentProfile()">
+        <input type="text" placeholder="Nombre" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="name">
+        <input type="text" placeholder="Número de control" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="controlNumber">
+        <select name="career" id="career" class="max-w-lg my-2 pl-2 bg-gray-200 text-gray-700" formControlName="career">
+            <option value="">Selecciona una opción</option>
+            <option *ngFor="let careerOpt of careers" [ngValue]="careerOpt.id">{{careerOpt.name}}</option>
+
+        </select>
+        <!-- <input type="text" placeholder="career" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="career"> -->
+        <!-- <input type="text" placeholder="semester" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="semester"> -->
+        <select name="semester" id="semester" class="max-w-lg my-2 pl-2 bg-gray-200 text-gray-700" formControlName="semester">
+            <option value="">Selecciona tu semestre</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+
+        </select>
+        <button class="bg-blue-400 my-1 rounded font-bold tracking-wider">{{profile? 'Guardar': 'Completar Registro'}}</button>
+        <button *ngIf="profile" (click)="closeProfile()" type="button" class="bg-red-400 my-1 rounded font-bold tracking-wider">Salir</button>
+    </form>
+</div>

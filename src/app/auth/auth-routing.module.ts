@@ -1,3 +1,4 @@
+import { AlreadyLoggedInGuard } from './../guards/already-logged-in.guard';
 import { AdminSignupComponent } from './admin-signup/admin-signup.component';
 import { AuthLayoutComponent } from './auth-layout/auth-layout.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
@@ -10,6 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component:AuthLayoutComponent,
+    canActivate:[AlreadyLoggedInGuard],
     children: [
       { path: 'login', component: LoginComponent },
       { path: 'sign-up', component: SignUpComponent },

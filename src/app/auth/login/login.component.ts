@@ -46,8 +46,9 @@ export class LoginComponent implements OnInit {
     let logged = await this.authService.loginEmail(user)
     if (logged?.error) {
       if (logged.error.code == 'auth/wrong-password') {
-        alert('Verifica tus datos')
       }
+      
+      alert('Verifica tus datos')
       
     }
 
