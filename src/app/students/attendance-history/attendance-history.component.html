@@ -1,1 +1,27 @@
-<p>attendance-history works!</p>
+<!-- <p>attendance-history works!</p> -->
+<div class="flex flex-col">
+    <div class="attendance flex justify-evenly text-center">
+        <p>
+            Sala
+
+        </p>
+        <p>
+            Entrada
+        </p>
+        <p>
+            Salida
+        </p>
+    </div>
+    <div class="attendance flex justify-evenly" *ngFor="let attendance of attendanceHistory">
+        <p>
+            {{attendance.area.name}}
+
+        </p>
+        <p>
+            {{attendance.startDateTime}}
+        </p>
+        <p>
+            {{attendance.endDateTime}}
+        </p>
+    </div>
+</div>

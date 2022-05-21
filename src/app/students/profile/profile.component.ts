@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
         }
         this.authService.updateStudentProfile(profile)
         if (!this.profile) {
-          this.router.navigate(['students','qr'])
+          this.router.navigate(['students'])
           
         }
 
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit {
   }
 
   closeProfile(){
-    this.router.navigate(['students','qr'])
+    this.router.navigate(['students'])
 
   }
 
