@@ -15,7 +15,7 @@ export class MonitorComponent implements OnInit {
   async registerStudentAttendance(result: string) {
     // this.scannerEnabled = false
     let res = await this.attendanceService.registerAttendance(result)
-    alert('succes: ' + result)
+    // alert('succes: ' + result)
     console.log({res});
     // this.scannerEnabled=true
       

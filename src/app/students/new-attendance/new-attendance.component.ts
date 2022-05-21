@@ -34,7 +34,7 @@ export class NewAttendanceComponent implements OnInit {
     this.materials = null
     this.attendance = { area: { name: '', status: 1 }, controlNumber: '', status: ''}
     this.attendanceForm = this.fb.group({
-      area: [{ name: '', status: 1 }, [Validators.required]],
+      area: ['', [Validators.required]],
       controlNumber: ['', [Validators.required]],
       material: ['', [Validators.required]],
     })
