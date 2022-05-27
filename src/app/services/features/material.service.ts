@@ -30,9 +30,14 @@ export class MaterialService {
     this.materials = of(null)
   }
 
-  create(data: Material) {
-    data = { Area: this.areaService.selectedArea, ...data }
-    return from(addDoc(this.colRef, data).then(e => e))
+create(data: Material) {
+    let material = getDocs(query(this.colRef, where('Area', '==', this.areaService.selectedArea)))
+    let area = this.areaService.getById(this.areaService.selectedArea)
+    // if (material.size > area.capacity!) {
+      // return
+    // }
+    let materialData = { Area: this.areaService.selectedArea, ...data }
+    return from(addDoc(this.colRef, materialData).then(e => e))
   }
   update(id: string, material: Material) {
     // let updatedData =

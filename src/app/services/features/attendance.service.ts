@@ -10,7 +10,6 @@ export interface Attendance {
   area: Area,
   student?: Profile
   status: string
-  controlNumber: string,
   materialList?: Material[],
   startDateTime?: string,
   endDateTime?: string,

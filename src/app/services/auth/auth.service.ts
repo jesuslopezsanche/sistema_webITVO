@@ -73,7 +73,7 @@ export class AuthService {
 
   signUp(user: any): Promise<any> {
     return createUserWithEmailAndPassword(this.auth, user.email, user.password)
-      .then(r => {
+      .then(async r => {
         let emailLower = user.email.toLowerCase();
 
         let newUser = {
@@ -84,8 +84,8 @@ export class AuthService {
         }
         console.log({newUser});
         
-
-        return this.updateUserData(newUser)
+        let data = await this.updateUserData(newUser)
+        return {user: r}
 
       }).catch(e => e as string)
   }
@@ -127,7 +127,7 @@ export class AuthService {
   async updateUserData(user: User) {
     console.log('creating user data', user);
     
-    const userRef = await doc(this.firestore, `users/${user.uid}`)
+    const userRef = doc(this.firestore, `users/${user.uid}`)
     const data: User = {
       uid: user.uid,
       email: user.email,
