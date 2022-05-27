@@ -21,12 +21,13 @@ export class AuthGuard implements CanActivate {
         
         return false
       }
+      this.authService.redirectUrl = state.url
       if (state.url !== '/students/profile') {
         console.log('check if registered');
 
         this.registrationCompleted(state.url).subscribe(rc => {console.log({rc});
         })
-        return this.checkStudentRole() && this.registrationCompleted(state.url)
+        return this.registrationCompleted(state.url) && this.checkStudentRole()
       }
       return this.checkStudentRole()
      
@@ -53,11 +54,11 @@ export class AuthGuard implements CanActivate {
     return this.authService.getStudentProfile().pipe(
       take(1),
       map(profile => {
-        console.log(profile);
+        console.log({profile});
         console.log(!!profile);
         return !!profile
       }),
-      tap(rc => !rc? this.router.navigate(['/students','profile']): false)
+      tap(rc => !rc? this.router.navigate(['/students','profile']): true)
     )
     
   }

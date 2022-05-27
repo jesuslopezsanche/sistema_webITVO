@@ -32,7 +32,7 @@ export class NewAttendanceComponent implements OnInit {
     this.attendance = null
     this.areas = null
     this.materials = null
-    this.attendance = { area: { name: '', status: 1 }, controlNumber: '', status: ''}
+    this.attendance = { area: { name: '', status: 1 }, status: ''}
     this.attendanceForm = this.fb.group({
       area: ['', [Validators.required]],
       controlNumber: ['', [Validators.required]],
@@ -61,12 +61,8 @@ export class NewAttendanceComponent implements OnInit {
     
     this.attendance = {
       area : this.attendanceForm.get('area')?.value,
-      controlNumber: this.attendanceForm.get('controlNumber')?.value,
       materialList: this.selectedMaterials,
       status: 'open'
-    }
-    if (this.attendance.controlNumber == '') {
-      return alert('Introduce tu número de control')
     }
     console.log(this.attendanceForm.get('area')?.value)
     if (this.attendance.area.name == '') {
@@ -77,9 +73,9 @@ export class NewAttendanceComponent implements OnInit {
     }
     this.authService.getStudentProfile().subscribe(async userProfile => {
       this.attendance!.student = userProfile
-      if (this.attendance!.controlNumber !== userProfile.controlNumber ) {
-        return alert('Tu número de control no coincide con los registros')
-      }
+      // if (this.attendance!.controlNumber !== userProfile.controlNumber ) {
+      //   return alert('Tu número de control no coincide con los registros')
+      // }
       console.log(this.attendance);
       this.attendanceService.create(this.attendance!).subscribe(data =>{
         console.log({createdAttendance: data});

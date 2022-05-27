@@ -1,7 +1,7 @@
 import { ReactiveFormsModule } from '@angular/forms';
 import { QRCodeModule } from 'angularx-qrcode';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 
 import { StudentsRoutingModule } from './students-routing.module';
 import { QrComponent } from './qr/qr.component';
@@ -27,7 +27,8 @@ import { AttendanceHistoryComponent } from './attendance-history/attendance-hist
     ReactiveFormsModule
   ],
   providers:[
-    AttendanceService
+    AttendanceService,
+    TitleCasePipe
   ]
 })
 export class StudentsModule { }

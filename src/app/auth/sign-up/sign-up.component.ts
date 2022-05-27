@@ -32,10 +32,14 @@ export class SignUpComponent implements OnInit {
 
     }
     if (password?.value == "" ||
-      (password?.value != confirmPassword?.value) ||
       this.signUpForm.invalid
     )
       return alert('ingresa todos los datos requeridos');
+      
+      if (password?.value != confirmPassword?.value) {
+        return alert('Las contraseñas no coinciden.');
+        
+      }
 
     console.log(this.signUpForm.controls);
     let user = {
@@ -44,25 +48,10 @@ export class SignUpComponent implements OnInit {
     }
 
     await this.authService.signUp(user).then(async r => {
-      if (r) {
-        console.log({r});
-        let logged = await this.authService.loginEmail(user)
-        if (logged?.error) {
-          if (logged.error.code == 'auth/wrong-password') {
-            alert('Verifica tus datos')
-          }
-
-        }
-
-        // if (this.authService.redirectUrl) {
-        //   this.router.navigateByUrl(this.authService.redirectUrl)
-        // } else {
-        //   this.router.navigate(['auth'])
-        // }
-
-        // this.router.navigateByUrl('auth/login')
-      }
-      else {
+      if (r.code == 'auth/email-already-in-use')
+      return alert('El email ya está en uso') 
+      if (r.code) {
+        console.log({r})
         alert('Ocurrió un error en el registro, por favor ponte en contacto con el administrador')
       }
     })
