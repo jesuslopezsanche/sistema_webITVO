@@ -1,0 +1,18 @@
+<div class="relative flex px-4 py-4 bg-emerald-500 text-zinc-200 font-bold tracking-widest text-lg rounded-t">
+    <button (click)="back()" class="absolute bottom-0 left-0 top-0 mx-4">go back</button>
+    <h1 class="grow text-center">{{action}} computadora</h1>
+</div>
+<form (ngSubmit)='handleSubmit()' [formGroup]="form" class="flex flex-col items-center justify-center py-6">
+    <input type="text" placeholder="Número de serie" formControlName='serialNumber' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="text" placeholder="Nombre del equipo" formControlName='name' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="text" placeholder="Usuario" formControlName='user' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="text" placeholder="Marca" formControlName='brand' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <select name="status" id="status" formControlName='status' class="min-w-[80%] rounded px-2 py-1 my-1 bg-zinc-100">
+        <option value="Mantenimiento">En Mantenimiento</option>
+        <option value="Rentado">Rentado</option>
+        <option value="Disponible">Disponible</option>
+    </select>
+    <button class="bg-emerald-500 mt-4 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
+    <a *ngIf="action == 'Editar'" (click)='deleteRegister()'
+        class="bg-red-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm mt-2">Eliminar</a>
+</form>
