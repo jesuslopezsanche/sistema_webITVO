@@ -4,7 +4,7 @@
         <input type="text" placeholder="Nombre" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="name">
         <input type="text" placeholder="Número de control" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="controlNumber">
         <select name="career" id="career" class="max-w-lg my-2 pl-2 bg-gray-200 text-gray-700" formControlName="career">
-            <option value="">Selecciona una opción</option>
+            <option value="">Selecciona tu carrera</option>
             <option *ngFor="let careerOpt of careers" [ngValue]="careerOpt.id">{{careerOpt.name}}</option>
 
         </select>

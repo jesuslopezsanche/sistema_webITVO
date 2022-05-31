@@ -6,7 +6,6 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'app-area-navigation',
   templateUrl: './area-navigation.component.html',
-  styleUrls: ['./area-navigation.component.css']
 })
 export class AreaNavigationComponent implements OnInit {
 
