@@ -28,6 +28,7 @@ const routes: Routes = [
       children: [
         {path: 'inventario', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'computadoras', loadChildren: () => import('./computers/computers.module').then(e => e.ComputersModule)},
+        {path: 'programs', loadChildren: () => import('./programs/programs.module').then(e => e.ProgramsModule)},
         {path: 'top-herramientas', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'mantenimiento', loadChildren: () => import('./materials/materials.module').then(e => e.MaterialsModule)},
         {path: 'asistencia', loadChildren: () => import('./attendance/attendance.module').then(e => e.AttendanceModule)},

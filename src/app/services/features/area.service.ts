@@ -8,6 +8,7 @@ export interface Area {
   status: any;
   capacity?: number
   supervisor?: number
+  computers?: Boolean
   career?: number
 }
 
@@ -33,11 +34,7 @@ export class AreaService {
   }
   update(id: string, area: Area) {
     return from(updateDoc(doc(this.colRef, id), {
-      name: area.name,
-      status: area.status,
-      capacity: area.capacity,
-      career: area.career,
-      supervisor: area.supervisor,
+      ...area
     }))
   }
 

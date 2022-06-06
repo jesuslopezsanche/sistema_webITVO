@@ -1,3 +1,4 @@
+import { Career } from './../features/career.service';
 import { Router } from '@angular/router';
 import { map, Observable, of, switchMap, take } from 'rxjs';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, authState, updateProfile, sendPasswordResetEmail, onAuthStateChanged } from '@angular/fire/auth';
@@ -21,7 +22,7 @@ export interface Profile {
   uid: string
   name: string
   controlNumber: string
-  career: string
+  career: Career
   semester: number
 }
 

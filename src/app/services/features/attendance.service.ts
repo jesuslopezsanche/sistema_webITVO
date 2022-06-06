@@ -1,6 +1,6 @@
 import { Computer, ComputerService } from './computer.service';
 import { Material } from './material.service';
-import { Area } from './area.service';
+import { Area, AreaService } from './area.service';
 import { AuthService, Profile } from '../auth/auth.service'
 import { Firestore, DocumentData, QueryDocumentSnapshot, getDocs, where, collection, CollectionReference, query, addDoc, getDoc, doc, setDoc } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
@@ -25,7 +25,12 @@ export class AttendanceService {
   sessions: Observable<QueryDocumentSnapshot<DocumentData> | null>
   uid: string | undefined;
   activeAttendance: Attendance | null = null
-  constructor(private firestore: Firestore, private authService: AuthService, private computerService: ComputerService) {
+  constructor(private firestore: Firestore, 
+    private authService: AuthService,
+     private computerService: ComputerService,
+     private areaService:AreaService
+
+     ) {
     this.colRef = collection(this.firestore, 'attendance')
     this.uid = ''
     this.authService.user$.subscribe(r => this.uid = r?.uid)
@@ -33,9 +38,21 @@ export class AttendanceService {
 
   }
   getAll() {
-    let sessions = getDocs(query(this.colRef, where('status', '!=', 'closed')))
+    let sessions = getDocs(query(this.colRef, where('status', '!=', 'closed'), where('area.id', '==', this.areaService.selectedArea)))
       .then(e => e.docs)
-      .then(e => e.map(el => el.data()))
+      .then(e => e.map(el => {
+        return {id: el.id, ...el.data()} as unknown as Attendance
+      }))
+    return from(sessions)
+  }
+  getAllAttendances() {
+    console.log('aateenda',{u: this.areaService.selectedArea});
+    
+    let sessions = getDocs(query(this.colRef, where('status', '==', 'closed'), where('area.id', '==', this.areaService.selectedArea)))
+      .then(e => e.docs)
+      .then(e => e.map(el => {
+        return {id: el.id, ...el.data()} as unknown as Attendance
+      }))
     return from(sessions)
   }
   getAllfromStudent() {

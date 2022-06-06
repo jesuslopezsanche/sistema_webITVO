@@ -1,0 +1,22 @@
+<div class="relative flex px-4 py-4 bg-emerald-500 text-zinc-200 font-bold tracking-widest text-lg rounded-t">
+    <button (click)="back()" class="absolute bottom-0 left-0 top-0 mx-4">go back</button>
+    <h1 class="grow text-center">{{action}} material</h1>
+</div>
+<form (ngSubmit)='handleSubmit()' [formGroup]="form" class="flex flex-col items-center justify-center py-6">
+    <input type="text" placeholder="Nombre del material" formControlName='name' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="text" placeholder="Versión" formControlName='version' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <select name="type" id="type" formControlName='type' class="min-w-[80%] rounded px-2 py-1 my-1 bg-zinc-100">
+        <option value="De Pago">De Pago</option>
+        <option value="Gratis">Gratis</option>
+    </select>
+    <input type="text" placeholder="licencia" formControlName='license' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="text" placeholder="Desarrollador" formControlName='brand' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <input type="date" placeholder="Fecha de instalación" formControlName='instalationDate' class="min-w-[80%] rounded px-2 py-1 my-1">
+    <select name="status" id="status" formControlName='status' class="min-w-[80%] rounded px-2 py-1 my-1 bg-zinc-100">
+        <option value="Habilitado">Habilitado</option>
+        <option value="Inhabilitado">Inhabilitado</option>
+    </select>
+    <button class="bg-emerald-500 mt-4 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm">{{action}}</button>
+    <a *ngIf="action == 'Editar'" (click)='deleteRegister()'
+        class="bg-red-500 text-zinc-200 font-bold tracking-widest py-1 px-4 rounded-sm mt-2">Eliminar</a>
+</form>
