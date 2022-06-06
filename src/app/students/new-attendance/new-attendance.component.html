@@ -9,7 +9,7 @@
             <p>Selecciona los materiales que ocuparás, de la siguiente lista</p>
             
             <select name="materials" id="materials" class="py-2 px-5 my-2 min-w-[250px]" (change)="addToList($event)" formControlName="material">
-                <option value="">Selecciona un área</option>
+                <option value="">Selecciona los materiales que usarás</option>
                 <option *ngFor="let material of materials" [ngValue]="material" >{{material.name}}</option>
             </select>
             
@@ -22,6 +22,30 @@
                         </div>
                         <div class="actions">
                             <div class="quit cursor-pointer rounded-full bg-red-500 px-3 text-center font-bolder text-gray-200" (click)="deleteFromList(material)">
+                                x
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="programs pt-5" *ngIf="programs">
+            <p>Selecciona los programas que ocuparás, de la siguiente lista</p>
+            
+            <select name="programs" id="programs" class="py-2 px-5 my-2 min-w-[250px]" (change)="addToProgramsList($event)" formControlName="program">
+                <option value="">Selecciona el software que usarás</option>
+                <option *ngFor="let program of programs" [ngValue]="program" >{{program.name}}</option>
+            </select>
+            
+            <div *ngIf="selectedPrograms.length > 0" class="program-list">
+                <p>Lista de software</p>
+                <div class="flex flex-col">
+                    <div class="selected-program my-1 flex justify-evenly" *ngFor="let program of selectedPrograms">
+                        <div class="name">
+                            {{program.name}}
+                        </div>
+                        <div class="actions">
+                            <div (click)="deleteFromProgramsList(program)" class="quit cursor-pointer rounded-full bg-red-500 px-3 text-center font-bolder text-gray-200">
                                 x
                             </div>
                         </div>

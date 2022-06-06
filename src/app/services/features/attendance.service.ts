@@ -1,3 +1,4 @@
+import { Program } from './program.service';
 import { Computer, ComputerService } from './computer.service';
 import { Material } from './material.service';
 import { Area, AreaService } from './area.service';
@@ -13,6 +14,7 @@ export interface Attendance {
   status: string
   computer?: Computer
   materialList?: Material[],
+  programList?: Program[],
   startDateTime?: string,
   endDateTime?: string,
 }
