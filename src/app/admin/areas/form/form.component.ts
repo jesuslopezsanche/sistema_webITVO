@@ -28,6 +28,7 @@ export class FormComponent implements OnInit {
       capacity: ['', Validators.min(0)],
       career: ['', Validators.required],
       supervisor: ['', Validators.required],
+      computers: [false, Validators.required],
       status: [true],
     })
     this.currArea = of(null)
@@ -44,6 +45,7 @@ export class FormComponent implements OnInit {
             capacity: e.capacity? e.capacity : '' ,
             career: e.capacity? e.career : '' ,
             supervisor: e.capacity? e.supervisor : '' ,
+            computers: e.computers? e.computers : false ,
             status: e.status,
           })
         })
@@ -56,6 +58,8 @@ export class FormComponent implements OnInit {
     this.router.navigate(['/dashboard/areas'])
   }
   handleSubmit() {
+    if (!this.form.valid) 
+    alert('Por favor introduzca todos los datos requeridos')
     if (this.form.valid) {
       let area = {
         name: this.form.get('name')?.value,
@@ -63,6 +67,7 @@ export class FormComponent implements OnInit {
         capacity: this.form.get('capacity')?.value,
         career: this.form.get('career')?.value,
         supervisor: this.form.get('supervisor')?.value,
+        computers: this.form.get('computers')?.value,
       }
       if (this.action == "Crear") {
         

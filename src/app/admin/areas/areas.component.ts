@@ -1,3 +1,4 @@
+import { Area } from 'src/app/services/features/area.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, take, switchMap } from 'rxjs';
 import { DocumentData } from '@angular/fire/firestore';
@@ -10,10 +11,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./areas.component.css']
 })
 export class AreasComponent implements OnInit {
-  areas: DocumentData[]| null= null
+  areas: Area[]| null= null
 
   constructor(private areaService: AreaService, private router: Router, private route: ActivatedRoute) {
-    areaService.getAll().subscribe( e => this.areas = e.map(el=> el))
+    areaService.getAll().subscribe( e => this.areas = e)
   }
 
   ngOnInit(): void {
