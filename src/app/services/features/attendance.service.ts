@@ -27,12 +27,12 @@ export class AttendanceService {
   sessions: Observable<QueryDocumentSnapshot<DocumentData> | null>
   uid: string | undefined;
   activeAttendance: Attendance | null = null
-  constructor(private firestore: Firestore, 
+  constructor(private firestore: Firestore,
     private authService: AuthService,
-     private computerService: ComputerService,
-     private areaService:AreaService
+    private computerService: ComputerService,
+    private areaService: AreaService
 
-     ) {
+  ) {
     this.colRef = collection(this.firestore, 'attendance')
     this.uid = ''
     this.authService.user$.subscribe(r => this.uid = r?.uid)
@@ -43,17 +43,17 @@ export class AttendanceService {
     let sessions = getDocs(query(this.colRef, where('status', '!=', 'closed'), where('area.id', '==', this.areaService.selectedArea)))
       .then(e => e.docs)
       .then(e => e.map(el => {
-        return {id: el.id, ...el.data()} as unknown as Attendance
+        return { id: el.id, ...el.data() } as unknown as Attendance
       }))
     return from(sessions)
   }
   getAllAttendances() {
-    console.log('aateenda',{u: this.areaService.selectedArea});
-    
+    console.log('aateenda', { u: this.areaService.selectedArea });
+
     let sessions = getDocs(query(this.colRef, where('status', '==', 'closed'), where('area.id', '==', this.areaService.selectedArea)))
       .then(e => e.docs)
       .then(e => e.map(el => {
-        return {id: el.id, ...el.data()} as unknown as Attendance
+        return { id: el.id, ...el.data() } as unknown as Attendance
       }))
     return from(sessions)
   }
@@ -93,20 +93,25 @@ export class AttendanceService {
     return sessions
   }
   create(area: Attendance) {
-    return this.computerService.getAvailable().pipe(
-      tap(r => {
-        console.log({availablecomputers: r});
-        let toUse = r
-        toUse.status = 'Rentado'
+    if (area.computer) {
 
-        return this.computerService.update(toUse.id!,toUse)
-        // return r
-        
-      }),
-      switchMap(r => {
-        area.computer = r
-        return from(addDoc(this.colRef, area).then(e => e))})
-    )
+      return this.computerService.getAvailable().pipe(
+        tap(r => {
+          console.log({ availablecomputers: r });
+          let toUse = r
+          toUse.status = 'Rentado'
+
+          return this.computerService.update(toUse.id!, toUse)
+          // return r
+
+        }),
+        switchMap(r => {
+          area.computer = r
+          return from(addDoc(this.colRef, area).then(e => e))
+        })
+      )
+    }
+    return from(addDoc(this.colRef, area).then(e => e))
 
     // return from(addDoc(this.colRef, area).then(e => e))
 
@@ -149,10 +154,10 @@ export class AttendanceService {
       console.log({ time });
     }
     if (attendanceData.status == 'registered') {
-      
+
       console.log('registered');
       if (!confirm('¿Confirma que quiere registrar su salida?'))
-      return 0
+        return 0
       attendanceData.endDateTime = datetime
       attendanceData.status = 'closed'
       let computer = attendanceData.computer!
@@ -163,7 +168,7 @@ export class AttendanceService {
       return of(res)
     }
     console.log('not open');
-    return {error: 'unknown error'}
+    return { error: 'unknown error' }
 
     // let 
     // let attendanceDoc = await addDoc(this.colRef, )
