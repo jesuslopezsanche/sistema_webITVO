@@ -1,3 +1,4 @@
+import { Program, ProgramService } from './../../services/features/program.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Material, MaterialService } from './../../services/features/material.service';
 import { AreaService } from './../../services/features/area.service';
@@ -18,6 +19,8 @@ export class NewAttendanceComponent implements OnInit {
   attendanceForm: FormGroup
   areas: Area[] | null
   materials: Material[] | null
+  programs: Program[] | null = null
+  selectedPrograms: Program[] = []
   selectedMaterials: Material[] = []
   attendance: Attendance | null
   constructor(
@@ -26,91 +29,118 @@ export class NewAttendanceComponent implements OnInit {
     private authService: AuthService,
     private areaService: AreaService,
     private materialService: MaterialService,
-    private route : ActivatedRoute,
-    private router:Router
+    private programService: ProgramService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.attendance = null
     this.areas = null
     this.materials = null
-    this.attendance = { area: { name: '', status: 1 }, status: ''}
+    this.attendance = { area: { name: '', status: 1 }, status: '' }
     this.attendanceForm = this.fb.group({
       area: ['', [Validators.required]],
       controlNumber: ['', [Validators.required]],
       material: ['', [Validators.required]],
+      program: ['']
     })
   }
 
   async ngOnInit(): Promise<void> {
-    this.attendanceService.getActiveFromStudent().subscribe(res =>{
+    this.attendanceService.getActiveFromStudent().subscribe(res => {
       console.log('activeSesh', res);
-      if (res?.length != 0){
+      if (res?.length != 0) {
         this.attendanceService.setActiveAttendance(res![0])
-        this.router.navigate(['../qr'], {relativeTo: this.route})
+        this.router.navigate(['../qr'], { relativeTo: this.route })
       }
-      
+
     })
     this.areaService.getAll().subscribe(area => {
       this.areas = area
     })
 
-    
+
   }
 
   newAttendance() {
     // let attendance = this.attendance
-    
+
     this.attendance = {
-      area : this.attendanceForm.get('area')?.value,
+      area: this.attendanceForm.get('area')?.value,
       materialList: this.selectedMaterials,
+      programList: this.selectedPrograms,
       status: 'open'
     }
     console.log(this.attendanceForm.get('area')?.value)
     if (this.attendance.area.name == '') {
       return alert('Selecciona el laboratorio al que quieres accesar')
     }
-    if (this.attendance.materialList!.length < 1) {
-      return alert('Selecciona los materiales que planeas usar')
-    }
+    if (!this.attendance.area.computers)
+      if (this.attendance.materialList!.length < 1) {
+        return alert('Selecciona los materiales que planeas usar')
+      }
+    if (this.attendance.area.computers)
+      if (this.attendance.programList!.length < 1) {
+        return alert('Selecciona el software que usarás')
+      }
     this.authService.getStudentProfile().subscribe(async userProfile => {
       this.attendance!.student = userProfile
       // if (this.attendance!.controlNumber !== userProfile.controlNumber ) {
       //   return alert('Tu número de control no coincide con los registros')
       // }
       console.log(this.attendance);
-      this.attendanceService.create(this.attendance!).subscribe(data =>{
-        console.log({createdAttendance: data});
-        
-        this.router.navigate(['../','qr'], {relativeTo: this.route})
+      this.attendanceService.create(this.attendance!).subscribe(data => {
+        console.log({ createdAttendance: data });
+
+        this.router.navigate(['../', 'qr'], { relativeTo: this.route })
       })
 
     })
-    
+
     this.attendanceForm.get('area')?.value
-    
-    
+
+
   }
-  selectecAreaChanged(event:any){
+  selectecAreaChanged(event: any) {
     let areaSelected = <Area>this.attendanceForm.get('area')?.value
     if (!areaSelected)
-    return
+      return
     this.areaService.setSelectedArea(areaSelected.id!)
-    this.materialService.getAll().subscribe(res =>{
-      this.materials= res
-    })
+    if (!areaSelected.computers)
+      this.materialService.getAll().subscribe(res => {
+        this.materials = res
+      })
+    else
+      this.programService.getAll().subscribe(res => {
+        this.programs = res
+      })
   }
-  addToList(event:any){
+  addToList(event: any) {
     console.log(event);
     let materialSelected = <Material>this.attendanceForm.get('material')?.value
     if (materialSelected.id) {
       this.selectedMaterials.push(materialSelected)
-      
+
     }
-    
+
   }
-  deleteFromList(material: Material){
+  deleteFromList(material: Material) {
     console.log('material deteled', material);
     let index = this.selectedMaterials.indexOf(material)
-    this.selectedMaterials.splice(index,1)
+    this.selectedMaterials.splice(index, 1)
+  }
+  addToProgramsList(event: any) {
+    console.log(event);
+    let materialSelected = <Program>this.attendanceForm.get('program')?.value
+    if (materialSelected.id) {
+      this.selectedPrograms.push(materialSelected)
+
+    }
+
+  }
+  deleteFromProgramsList(program: Program) {
+    console.log('material deteled', program);
+    let index = this.selectedPrograms.indexOf(program)
+    this.selectedPrograms.splice(index, 1)
   }
 
 }
