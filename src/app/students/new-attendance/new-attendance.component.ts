@@ -102,6 +102,8 @@ export class NewAttendanceComponent implements OnInit {
   }
   selectecAreaChanged(event: any) {
     let areaSelected = <Area>this.attendanceForm.get('area')?.value
+    this.programs = null
+    this.materials = null
     if (!areaSelected)
       return
     this.areaService.setSelectedArea(areaSelected.id!)
