@@ -147,7 +147,8 @@ export class AttendanceService {
       attendanceData.startDateTime = datetime
       attendanceData.status = 'registered'
       let res = setDoc(doc(this.colRef, attendanceId), attendanceData)
-      alert(`Se ha registrado la entrada de ${attendanceData.student?.name} a la sala: ${attendanceData.area.name}, cuida y aprovecha las instalaciones`)
+      this.say('Se ha registrado tu entrada')
+      // alert(`Se ha registrado la entrada de ${attendanceData.student?.name} a la sala: ${attendanceData.area.name}, cuida y aprovecha las instalaciones`)
 
       return of(res)
       // student.data()
@@ -164,19 +165,50 @@ export class AttendanceService {
       computer.status = 'Disponible'
       this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
       let res = await setDoc(doc(this.colRef, attendanceId), attendanceData)
-      alert(`Se ha registrado la salida de ${attendanceData.student?.name} de la sala: ${attendanceData.area.name}, esperemos que haya aprendido mucho hoy!`)
+      this.say(`Se ha registrado la salida de ${attendanceData.student?.name} de la sala: ${attendanceData.area.name}, esperemos que haya aprendido mucho hoy!`)
       return of(res)
     }
     console.log('not open');
     return { error: 'unknown error' }
-
-    // let 
-    // let attendanceDoc = await addDoc(this.colRef, )
-    // return attendanceDoc
-
   }
+  
   setActiveAttendance(attendance: Attendance) {
     this.activeAttendance = attendance
   }
+
+  say( phrase : string){
+    let voice = new SpeechSynthesisUtterance(phrase)
+  voice.lang = 'es-Us'
+  voice.volume = 1
+  voice.rate = 1
+  voice.pitch = .7
+
+  let voices = speechSynthesis.getVoices().filter(e => e.lang.startsWith('es-'))
+  if (!voices.length) {
+
+    speechSynthesis.addEventListener(
+      "voiceschanged",
+      () => {
+        voices = speechSynthesis.getVoices().filter(e => e.lang.startsWith('es-')).reverse()
+
+        console.log({ voices });
+        // voice.voice = voices[1]
+        voice.onstart = () => console.log(44444444);
+        
+        let speech = speechSynthesis
+        speech.cancel()
+        speech.speak(voice)
+        // speech.
+
+        console.log({ speech, voice, voices });
+
+      }
+    );
+  }
+  let speech = speechSynthesis
+        speech.cancel()
+        speech.speak(voice)
+
+}
 
 }
