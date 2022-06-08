@@ -1,9 +1,9 @@
 <div class="min-h-full py-5 flex flex-col items-center">
     <h1 class="text-center text-lg">Lista de asistencia</h1>
     <div class="flex justify-center">
-        <input type="date" name="startDate" id="startDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm">
-        <input type="date" name="endDate" id="endDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm">
-        <button class="mx-2 bg-zinc-100 px-2 py1 rounded-sm">Consultar</button>
+        <input type="date" name="startDate" id="startDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" [(ngModel)]="startDate">
+        <input type="date" name="endDate" id="endDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" [(ngModel)]="endDate">
+        <button class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" (click)="queryDates()">Consultar</button>
     </div>
     <div class="min-w-full flex justify-center">
 
@@ -23,8 +23,8 @@
                     <td class="py-1">{{attendant.student?.controlNumber}}</td>
                     <td class="py-1">{{attendant.student?.name}}</td>
                     <td class="py-1">{{attendant.student?.career?.name}}</td>
-                    <td class="py-1">{{attendant.startDateTime}}</td>
-                    <td class="py-1">{{attendant.endDateTime}}</td>
+                    <td class="py-1">{{attendant.startDateTime? attendant.startDateTime.toDate().toLocaleString(): 'n/a'}}</td>
+                    <td class="py-1">{{attendant.endDateTime? attendant.endDateTime.toDate().toLocaleString() : 'n/a'}}</td>
                 </tr>
                 
             </tbody>

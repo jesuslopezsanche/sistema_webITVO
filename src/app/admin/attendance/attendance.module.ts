@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AttendanceRoutingModule } from './attendance-routing.module';
 import { AttendanceComponent } from './attendance.component';
 import { RealTimeComponent } from './real-time/real-time.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { RealTimeComponent } from './real-time/real-time.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     AttendanceRoutingModule
   ]
 })

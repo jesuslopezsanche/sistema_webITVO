@@ -11,24 +11,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AttendanceComponent implements OnInit {
 
-  attendants: Attendance[]| null= null
+  attendants: Attendance[] | null = null
+  startDate: Date = new Date()
+  endDate: Date = new Date()
 
-  constructor(private attendanceService: AttendanceService,private areaService:AreaService, private router: Router, private route: ActivatedRoute) {
-    route.params.subscribe( r => {
+  constructor(private attendanceService: AttendanceService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) {
+    route.params.subscribe(r => {
       if (r['areaId']) {
         areaService.setSelectedArea(r['areaId'])
-        attendanceService.getAllAttendances().subscribe( e => this.attendants = e)
+        attendanceService.getAllAttendances().subscribe(e => {
+
+          console.log({ e });
+
+          this.attendants = e
+        }
+        )
       }
     })
-    
+
   }
 
   ngOnInit(): void {
   }
-  edit(area:any){
+  edit(area: any) {
     console.log(area);
-    
-    this.router.navigate(['edit',area['id']],{relativeTo: this.route})
 
+    this.router.navigate(['edit', area['id']], { relativeTo: this.route })
+
+  }
+  queryDates() {
+    this.attendanceService.getAllAttendancesInDate(new Date(this.startDate), new Date(this.endDate)).subscribe(
+      r => this.attendants = r
+
+    )
   }
 }

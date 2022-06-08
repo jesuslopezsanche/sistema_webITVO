@@ -3,7 +3,7 @@ import { Computer, ComputerService } from './computer.service';
 import { Material } from './material.service';
 import { Area, AreaService } from './area.service';
 import { AuthService, Profile } from '../auth/auth.service'
-import { Firestore, DocumentData, QueryDocumentSnapshot, getDocs, where, collection, CollectionReference, query, addDoc, getDoc, doc, setDoc } from '@angular/fire/firestore';
+import { Firestore, DocumentData, QueryDocumentSnapshot, Timestamp, getDocs, where, collection, CollectionReference, query, addDoc, getDoc, doc, setDoc, collectionSnapshots } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { from, Observable, of, switchMap, take, tap, map, mergeMap } from 'rxjs';
 
@@ -15,8 +15,8 @@ export interface Attendance {
   computer?: Computer
   materialList?: Material[],
   programList?: Program[],
-  startDateTime?: string,
-  endDateTime?: string,
+  startDateTime?: Timestamp,
+  endDateTime?: Timestamp,
 }
 
 @Injectable({
@@ -57,6 +57,17 @@ export class AttendanceService {
       }))
     return from(sessions)
   }
+  getAllAttendancesInDate(date1: Date, date2:Date) {
+    console.log(date1, date2);
+    
+
+    let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2))))
+      .then(e => e.docs)
+      .then(e => e.map(el => {
+        return { id: el.id, ...el.data() } as unknown as Attendance
+      }))
+    return from(sessions)
+  }
   getAllfromStudent() {
 
     let sessions = this.authService.user$.pipe(
@@ -76,83 +87,84 @@ export class AttendanceService {
   getActiveFromStudent() {
     let sessions = this.authService.user$.pipe(
       switchMap(async user => {
-        console.log('query');
-
         if (user)
-          return await (await getDocs(query(this.colRef, where('student.uid', '==', user.uid), where('status', '!=', 'closed')))).docs
-            .map(e => {
-              console.log({ e });
-
-              return { id: e.id, ...e.data() } as unknown as Attendance
-            })
+        return collectionSnapshots(query(this.colRef, where('student.uid', '==', user.uid), where('status', '!=', 'closed')))
+         
         return null
       }
-      )
+      ),
+      switchMap(r => r!.pipe(switchMap(r => r.map(e => {
+        return {id: e.id, ... e.data()} as Attendance
+      }))))
     )
 
     return sessions
   }
-  create(area: Attendance) {
-    if (area.computer) {
+  create(attendance: Attendance) {
+    if (attendance.area.computers) {
 
       return this.computerService.getAvailable().pipe(
         tap(r => {
           console.log({ availablecomputers: r });
           let toUse = r
           toUse.status = 'Rentado'
-
+          
           return this.computerService.update(toUse.id!, toUse)
           // return r
-
+          
         }),
         switchMap(r => {
-          area.computer = r
-          return from(addDoc(this.colRef, area).then(e => e))
+          console.log({ availablecomputers: r });
+          attendance.computer = r
+          return from(addDoc(this.colRef, attendance).then(e => e))
         })
       )
     }
-    return from(addDoc(this.colRef, area).then(e => e))
+    return from(addDoc(this.colRef, attendance).then(e => e))
 
     // return from(addDoc(this.colRef, area).then(e => e))
 
   }
-  async registerAttendance(attendanceId: string) {
+  async registerAttendance(id: string) {
     let attendanceColRef = collection(this.firestore, 'attendance')
-    let attendanceRecord = await getDoc(doc(attendanceColRef, attendanceId))
-    if (!attendanceRecord.exists()) {
-
+    let attendanceRecords = await getDocs(query(attendanceColRef,where('student.controlNumber', '==', id),where('status', '!=', 'closed' )))
+    // return 
+    
+    if (attendanceRecords.empty) {
+      
       return alert('No se encontró la sesión, ponte en contacto con el administrador del área')
     }
+    console.log((attendanceRecords.docs[0].data()));
+    let attendanceRecord = attendanceRecords.docs[0]
     let attendanceData = { id: attendanceRecord.id, ...attendanceRecord.data() } as unknown as Attendance
-    console.log({ attendanceData, attendanceId })
-    let time = await fetch('https://worldtimeapi.org/api/timezone/America/Mexico_city',
-      {
-        headers: {
-          //   'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        method: 'GET',
-        // mode:'cors'
-      })
-    time = await time.json()
-    let datetime = <any>time
-    datetime = datetime.datetime
+    console.log({ attendanceData, attendanceId: id })
+    // let time = await fetch('https://worldtimeapi.org/api/timezone/America/Mexico_city',
+    //   {
+    //     headers: {
+    //       //   'Content-Type': 'application/json',
+    //       Accept: 'application/json',
+    //     },
+    //     method: 'GET',
+    //     // mode:'cors'
+    //   })
+    // time = await time.json()
+    let datetime = Timestamp.fromMillis(Date.now())
     if (attendanceData.status == 'open') {
 
-      console.log('OPEN', { attendanceData, attendanceId })
+      console.log('OPEN', { attendanceData, attendanceId: id })
       // return
       // alert('siexiste') 
       // return 0;
 
       attendanceData.startDateTime = datetime
       attendanceData.status = 'registered'
-      let res = setDoc(doc(this.colRef, attendanceId), attendanceData)
+      let res = await setDoc(doc(this.colRef, attendanceData.id), attendanceData)
       this.say('Se ha registrado tu entrada')
       // alert(`Se ha registrado la entrada de ${attendanceData.student?.name} a la sala: ${attendanceData.area.name}, cuida y aprovecha las instalaciones`)
 
       return of(res)
       // student.data()
-      console.log({ time });
+      // console.log({ time });
     }
     if (attendanceData.status == 'registered') {
 
@@ -162,10 +174,13 @@ export class AttendanceService {
       attendanceData.endDateTime = datetime
       attendanceData.status = 'closed'
       let computer = attendanceData.computer!
+      console.log('primer status');
+      
       computer.status = 'Disponible'
+      console.log('segundo status');
       this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
-      let res = await setDoc(doc(this.colRef, attendanceId), attendanceData)
-      this.say(`Se ha registrado la salida de ${attendanceData.student?.name} de la sala: ${attendanceData.area.name}, esperemos que haya aprendido mucho hoy!`)
+      let res = await setDoc(doc(this.colRef, attendanceData.id), attendanceData)
+      this.say(`Se ha registrado tu salida de la sala: ${attendanceData.area.name}`)
       return of(res)
     }
     console.log('not open');
@@ -181,7 +196,7 @@ export class AttendanceService {
   voice.lang = 'es-Us'
   voice.volume = 1
   voice.rate = 1
-  voice.pitch = .7
+  voice.pitch = .9
 
   let voices = speechSynthesis.getVoices().filter(e => e.lang.startsWith('es-'))
   if (!voices.length) {

@@ -1,8 +1,9 @@
 <div class="pending flex items-center flex-col justify-center min-w-full" *ngIf="attendance; else noNetwork">
-    <qrcode [qrdata]="attendance?.id!" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
-    <div class="status">
+    <qrcode [qrdata]="attendance?.student?.controlNumber!" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+    <div class="status" *ngIf="attendance.computer">
         <div class="open rounded py-2 px-5">
             Usuario: {{attendance.computer?.user}}
+            status: {{attendance.status}}
         </div>
     </div>
     <div class="status">
