@@ -26,13 +26,13 @@ export class QrComponent implements OnInit {
       return
     }
     this.attendanceService.getActiveFromStudent().subscribe(res =>{
-      if(res?.length != 0){
-        console.log('activesesh', res);
+      if(res){
+        console.log('activeseshzzzz', res);
         
-        this.attendance = res![0]
+        this.attendance = res
       }
     })
-    this.startCheckingSession()
+    // this.startCheckingSession()
     // console.log({ us: this.user });
   }
 
@@ -47,10 +47,10 @@ export class QrComponent implements OnInit {
         tries++
         console.log('is active?????');
         this.attendanceService.getActiveFromStudent().subscribe(res =>{
-          if(res?.length != 0){
+          if(res){
             console.log('activesesh', res);
             
-            this.attendance = res![0]
+            this.attendance = res
           }
         })
         

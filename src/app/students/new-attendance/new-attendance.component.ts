@@ -48,8 +48,8 @@ export class NewAttendanceComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.attendanceService.getActiveFromStudent().subscribe(res => {
       console.log('activeSesh', res);
-      if (res?.length != 0) {
-        this.attendanceService.setActiveAttendance(res![0])
+      if (res) {
+        this.attendanceService.setActiveAttendance(res)
         this.router.navigate(['../qr'], { relativeTo: this.route })
       }
 
