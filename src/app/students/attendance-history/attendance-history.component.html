@@ -18,10 +18,10 @@
 
         </p>
         <p>
-            {{attendance.startDateTime}}
+            {{attendance.startDateTime?.toDate()?.toLocaleString()}}
         </p>
         <p>
-            {{attendance.endDateTime}}
+            {{attendance.endDateTime?.toDate()?.toLocaleString()}}
         </p>
     </div>
 </div>

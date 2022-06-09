@@ -1,4 +1,4 @@
-import { ComputerService } from './../../services/features/computer.service';
+import { Computer, ComputerService } from './../../services/features/computer.service';
 import { DocumentData } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ComputersComponent implements OnInit {
 
-  computers: DocumentData[]| null= null
+  computers: Computer[]| null= null
   selectedComputer: string = ''
 
   constructor(private computerService: ComputerService, private router: Router, private route: ActivatedRoute) {
@@ -41,7 +41,7 @@ export class ComputersComponent implements OnInit {
 
   }
   getComputers(){
-    this.computerService.getAll().subscribe( e => this.computers = e.map(el=> el))
+    this.computerService.getAll().subscribe( e => this.computers = e)
   }
 
 }
