@@ -65,6 +65,11 @@ create(data: Computer) {
     let materials = getDocs(query(this.colRef, where('Area', '==', this.areaService.selectedArea), where('status', '==', 'Disponible'), orderBy('user'), limit(1)))
       .then(e => e.docs)
       .then(e => {
+        if (!e.length)
+        return null
+        console.log({e});
+        
+
         let el = e[0]
         
         return { id: el.id, ...el.data() } as unknown as Computer
