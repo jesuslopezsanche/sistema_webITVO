@@ -106,7 +106,10 @@ export class AttendanceService {
       return this.computerService.getAvailable().pipe(
         tap(r => {
           console.log({ availablecomputers: r });
-          let toUse = r
+          if (!r) {
+            return null            
+          }
+          let toUse = r!
           toUse.status = 'Rentado'
           
           return this.computerService.update(toUse.id!, toUse)
@@ -115,7 +118,11 @@ export class AttendanceService {
         }),
         switchMap(r => {
           console.log({ availablecomputers: r });
-          attendance.computer = r
+          if (!r) {
+            this.say('Lo sentimos, por el momento no hay computadoras disponibles, inténtalo más tarde')
+            return of(null)
+          }
+          attendance.computer = r!
           return from(addDoc(this.colRef, attendance).then(e => e))
         })
       )

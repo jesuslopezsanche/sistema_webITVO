@@ -90,7 +90,7 @@ export class NewAttendanceComponent implements OnInit {
       console.log(this.attendance);
       this.attendanceService.create(this.attendance!).subscribe(data => {
         console.log({ createdAttendance: data });
-
+        if (data)
         this.router.navigate(['../', 'qr'], { relativeTo: this.route })
       })
 
@@ -103,7 +103,9 @@ export class NewAttendanceComponent implements OnInit {
   selectecAreaChanged(event: any) {
     let areaSelected = <Area>this.attendanceForm.get('area')?.value
     this.programs = null
+    this.selectedPrograms = []
     this.materials = null
+    this.selectedMaterials = []
     if (!areaSelected)
       return
     this.areaService.setSelectedArea(areaSelected.id!)
