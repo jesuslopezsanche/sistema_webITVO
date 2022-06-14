@@ -36,31 +36,31 @@ export class QrComponent implements OnInit {
     // console.log({ us: this.user });
   }
 
-  startCheckingSession(){
-    let maxTries = 3
-    let tries = 0
-    let interval = 15000
-    console.log({maxTries, tries});
-    let checksessionTimeout: any = setInterval(() => {
-      console.log({maxTries, tries});
-      if (tries < maxTries) {
-        tries++
-        console.log('is active?????');
-        this.attendanceService.getActiveFromStudent().subscribe(res =>{
-          if(res){
-            console.log('activesesh', res);
+  // startCheckingSession(){
+    // let maxTries = 3
+  //   let tries = 0
+  //   let interval = 15000
+  //   console.log({maxTries, tries});
+  //   let checksessionTimeout: any = setInterval(() => {
+  //     console.log({maxTries, tries});
+  //     if (tries < maxTries) {
+  //       tries++
+  //       console.log('is active?????');
+  //       this.attendanceService.getActiveFromStudent().subscribe(res =>{
+  //         if(res){
+  //           console.log('activesesh', res);
             
-            this.attendance = res
-          }
-        })
+  //           this.attendance = res
+  //         }
+  //       })
         
-      }else{
+  //     }else{
         
-        return clearInterval(checksessionTimeout)
-        return alert('se ha alcanzado el número máximo de intentos de registro, por favor actualiza la página')
-      }
+  //       return clearInterval(checksessionTimeout)
+  //       return alert('se ha alcanzado el número máximo de intentos de registro, por favor actualiza la página')
+  //     }
       
-    }, interval);
-  }
+  //   }, interval);
+  // }
 
 }

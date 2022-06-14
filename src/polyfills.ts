@@ -44,11 +44,16 @@
 
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
+ *  (window as any).__Zone_enable_cross_context_check = true;
  */
+// (window as any).__Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
 import 'zone.js';  // Included with Angular CLI.
 
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
- (window as any)['global'] = window;
+// import 'chartist';
+
+// (window as any)['Chartist'] = Chartist;
+(window as any).global = globalThis;

@@ -193,14 +193,17 @@ export class AttendanceService {
       console.log('registered');
       if (!confirm('¿Confirma que quiere registrar su salida?'))
         return 0
-      attendanceData.endDateTime = datetime
-      attendanceData.status = 'closed'
-      let computer = attendanceData.computer!
-      console.log('primer status');
-
-      computer.status = 'Disponible'
-      console.log('segundo status');
-      this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
+        attendanceData.endDateTime = datetime
+        attendanceData.status = 'closed'
+        if (attendanceData.computer) {
+        
+          let computer = attendanceData.computer!
+          console.log('primer status');
+          
+          computer.status = 'Disponible'
+          console.log('segundo status');
+          this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
+        }
       let res = await setDoc(doc(this.colRef, attendanceData.id), attendanceData)
       this.say(`Se ha registrado tu salida de la sala: ${attendanceData.area.name}`)
       return of(res)
