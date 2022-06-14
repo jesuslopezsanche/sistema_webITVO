@@ -1,15 +1,18 @@
 <div class="py-4 flex flex-col min-h-[100%]">
 
     <div class="flex justify-evenly py-4">
-        <div class="flex">
-            <label for="range" class="mx-2">Rango:</label>
-            <select name="range" id="range" class="bg-zinc-100 mx-2 px-2 py-1">
-                <option value="Diario">Diario</option>
-                <option value="Semanal">Semanal</option>
-                <option value="Mensual">Mensual</option>
-            </select>
-        </div>
-        <button class="bg-zinc-100 mx-2 px-4 py-1">Consultar</button>
+        <form action="">
+
+            <div class="flex">
+                <label for="range" class="mx-2">Rango:</label>
+                <select name="range" id="range" class="bg-zinc-100 mx-2 px-2 py-1" formControlName='range'>
+                    <option value="Diario">Diario</option>
+                    <option value="Semanal">Semanal</option>
+                    <option value="Mensual">Mensual</option>
+                </select>
+            </div>
+            <button class="bg-zinc-100 mx-2 px-4 py-1">Consultar</button>
+        </form>
     </div>
     <div class="flex justify-center items-center grow min-w-full">
 
