@@ -120,28 +120,21 @@ export class AttendanceService {
         }),
         switchMap(r => {
           console.log({ availablecomputers: r });
-          if (attendance.computer && !r) {
+          if (attendance.area.computers && !r) {
             this.say('Lo sentimos, por el momento no hay computadoras disponibles, inténtalo más tarde')
             return of(null)
           }
           if (attendance.area.computers) {
             attendance.computer = r!
             attendance.programIdList = attendance.programList!.map(e => e.id!)
-          } else
-            attendance.programIdList = attendance.materialList!.map(e => e.id!)
-          return from(addDoc(this.colRef, attendance).then(e => {
-            // if (attendance.computer)
-            //   addDoc(collection(e, 'ProgramList',), attendance.programList)
-            // else
-            //   addDoc(collection(e, 'MaterialList'), attendance.programList)
-            return e
-
-
-          })
+          }
+          return from(addDoc(this.colRef, attendance)
           )
         })
       )
     }
+    else
+      attendance.materialIdList = attendance.materialList!.map(e => e.id!)
     return from(addDoc(this.colRef, attendance).then(e => e))
 
     // return from(addDoc(this.colRef, area).then(e => e))
@@ -193,17 +186,17 @@ export class AttendanceService {
       console.log('registered');
       if (!confirm('¿Confirma que quiere registrar su salida?'))
         return 0
-        attendanceData.endDateTime = datetime
-        attendanceData.status = 'closed'
-        if (attendanceData.computer) {
-        
-          let computer = attendanceData.computer!
-          console.log('primer status');
-          
-          computer.status = 'Disponible'
-          console.log('segundo status');
-          this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
-        }
+      attendanceData.endDateTime = datetime
+      attendanceData.status = 'closed'
+      if (attendanceData.computer) {
+
+        let computer = attendanceData.computer!
+        console.log('primer status');
+
+        computer.status = 'Disponible'
+        console.log('segundo status');
+        this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
+      }
       let res = await setDoc(doc(this.colRef, attendanceData.id), attendanceData)
       this.say(`Se ha registrado tu salida de la sala: ${attendanceData.area.name}`)
       return of(res)

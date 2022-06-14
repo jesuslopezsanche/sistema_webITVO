@@ -74,7 +74,6 @@ export class ProgramService {
       ),
       // switchMap(e => e.map(r => ({ total: r.size, })))
     )
-    throw new Error('Method not implemented.');
   }
 
   getById(id: string) {
