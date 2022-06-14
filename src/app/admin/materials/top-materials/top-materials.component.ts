@@ -1,3 +1,7 @@
+import { switchMap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { AreaService } from './../../../services/features/area.service';
+import { MaterialService } from './../../../services/features/material.service';
 import { ProgramService } from './../../../services/features/program.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
@@ -16,19 +20,29 @@ export class TopMaterialsComponent implements OnInit {
   chartOptions: IPieChartOptions = { width: '100%', height:'55vh'}
   form: FormGroup
   tabledata = []
-  constructor(private programService:ProgramService, private fb:FormBuilder) { 
+  constructor(
+    private programService:ProgramService,
+    private materialService:MaterialService,
+    private areaService : AreaService,
+    private fb:FormBuilder,
+    private route: ActivatedRoute
+
+     ) { 
     this.form = this.fb.group({
       range: ['', Validators.required]
     })
   }
 
   ngOnInit(): void {
-    
-
-    this.programService.getTop('Diario').subscribe( r =>{
+    this.route.paramMap.pipe(switchMap(e => this.areaService.getById(e.get('areaId')!)),
+    switchMap(e => {
+      if (e.computers)
+      return this.programService.getTop('Diario')
+      return this.materialService.getTop('Diario')
+    })).subscribe( r =>{
       console.log({top: r});
       let labels = r.map(e => e.program.name)
-      let series = r.map(e => e.size)
+      let series = r.map(e => e.size <1? 0.1: e.size)
       this.chartData = {labels, series}
       console.log(this.chartData)
       

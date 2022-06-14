@@ -6,7 +6,7 @@ import {
   getDoc, getDocs, query, QueryDocumentSnapshot,
   updateDoc, where
 } from '@angular/fire/firestore';
-import { from, of, Observable } from 'rxjs';
+import { of, Observable, switchMap, zip, from } from 'rxjs';
 
 export interface Material {
   id?: string,
@@ -60,6 +60,21 @@ create(data: Material) {
       }))
 
     return from(materials)
+  }
+
+  getTop(range: string) {
+    let attRef = collection(this.firestore, 'attendance')
+    return this.getAll().pipe(
+      switchMap(
+        e => zip(...e.map(e => getDocs(
+          query(attRef, where('materialIdList', 'array-contains', e.id))
+        ).then( r => ({program: e, size: r.size}))
+        )
+        )
+
+      ),
+      // switchMap(e => e.map(r => ({ total: r.size, })))
+    )
   }
 
   getById(id: string) {
