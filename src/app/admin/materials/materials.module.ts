@@ -1,3 +1,4 @@
+import { ChartistModule } from 'ng-chartist';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialsComponent } from './materials.component';
 import { NgModule } from '@angular/core';
@@ -17,7 +18,8 @@ import { TopMaterialsComponent } from './top-materials/top-materials.component';
   imports: [
     CommonModule,
     MaterialsRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ChartistModule
   ]
 })
 export class MaterialsModule { }

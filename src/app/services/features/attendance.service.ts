@@ -14,7 +14,9 @@ export interface Attendance {
   status: string
   computer?: Computer
   materialList?: Material[],
+  materialIdList?: string[],
   programList?: Program[],
+  programIdList?: string[],
   startDateTime?: Timestamp,
   endDateTime?: Timestamp,
 }
@@ -57,9 +59,9 @@ export class AttendanceService {
       }))
     return from(sessions)
   }
-  getAllAttendancesInDate(date1: Date, date2:Date) {
+  getAllAttendancesInDate(date1: Date, date2: Date) {
     console.log(date1, date2);
-    
+
 
     let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2))))
       .then(e => e.docs)
@@ -88,13 +90,13 @@ export class AttendanceService {
     let sessions = this.authService.user$.pipe(
       switchMap(async user => {
         if (user)
-        return collectionSnapshots(query(this.colRef, where('student.uid', '==', user.uid), where('status', '!=', 'closed')))
-         
+          return collectionSnapshots(query(this.colRef, where('student.uid', '==', user.uid), where('status', '!=', 'closed')))
+
         return null
       }
       ),
       switchMap(r => r!.pipe(switchMap(r => r.map(e => {
-        return {id: e.id, ... e.data()} as Attendance
+        return { id: e.id, ...e.data() } as Attendance
       }))))
     )
 
@@ -107,23 +109,36 @@ export class AttendanceService {
         tap(r => {
           console.log({ availablecomputers: r });
           if (!r) {
-            return null            
+            return null
           }
           let toUse = r!
           toUse.status = 'Rentado'
-          
+
           return this.computerService.update(toUse.id!, toUse)
           // return r
-          
+
         }),
         switchMap(r => {
           console.log({ availablecomputers: r });
-          if (!r) {
+          if (attendance.computer && !r) {
             this.say('Lo sentimos, por el momento no hay computadoras disponibles, inténtalo más tarde')
             return of(null)
           }
-          attendance.computer = r!
-          return from(addDoc(this.colRef, attendance).then(e => e))
+          if (attendance.area.computers) {
+            attendance.computer = r!
+            attendance.programIdList = attendance.programList!.map(e => e.id!)
+          } else
+            attendance.programIdList = attendance.materialList!.map(e => e.id!)
+          return from(addDoc(this.colRef, attendance).then(e => {
+            // if (attendance.computer)
+            //   addDoc(collection(e, 'ProgramList',), attendance.programList)
+            // else
+            //   addDoc(collection(e, 'MaterialList'), attendance.programList)
+            return e
+
+
+          })
+          )
         })
       )
     }
@@ -134,11 +149,11 @@ export class AttendanceService {
   }
   async registerAttendance(id: string) {
     let attendanceColRef = collection(this.firestore, 'attendance')
-    let attendanceRecords = await getDocs(query(attendanceColRef,where('student.controlNumber', '==', id),where('status', '!=', 'closed' )))
+    let attendanceRecords = await getDocs(query(attendanceColRef, where('student.controlNumber', '==', id), where('status', '!=', 'closed')))
     // return 
-    
+
     if (attendanceRecords.empty) {
-      
+
       return alert('No se encontró la sesión, ponte en contacto con el administrador del área')
     }
     console.log((attendanceRecords.docs[0].data()));
@@ -182,7 +197,7 @@ export class AttendanceService {
       attendanceData.status = 'closed'
       let computer = attendanceData.computer!
       console.log('primer status');
-      
+
       computer.status = 'Disponible'
       console.log('segundo status');
       this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
@@ -193,44 +208,44 @@ export class AttendanceService {
     console.log('not open');
     return { error: 'unknown error' }
   }
-  
+
   setActiveAttendance(attendance: Attendance) {
     this.activeAttendance = attendance
   }
 
-  say( phrase : string){
+  say(phrase: string) {
     let voice = new SpeechSynthesisUtterance(phrase)
-  voice.lang = 'es-Us'
-  voice.volume = 1
-  voice.rate = 1
-  voice.pitch = .9
+    voice.lang = 'es-Us'
+    voice.volume = 1
+    voice.rate = 1
+    voice.pitch = .9
 
-  let voices = speechSynthesis.getVoices().filter(e => e.lang.startsWith('es-'))
-  if (!voices.length) {
+    let voices = speechSynthesis.getVoices().filter(e => e.lang.startsWith('es-'))
+    if (!voices.length) {
 
-    speechSynthesis.addEventListener(
-      "voiceschanged",
-      () => {
-        voices = speechSynthesis.getVoices().filter(e => e.lang.startsWith('es-')).reverse()
+      speechSynthesis.addEventListener(
+        "voiceschanged",
+        () => {
+          voices = speechSynthesis.getVoices().filter(e => e.lang.startsWith('es-')).reverse()
 
-        console.log({ voices });
-        // voice.voice = voices[1]
-        voice.onstart = () => console.log(44444444);
-        
-        let speech = speechSynthesis
-        speech.cancel()
-        speech.speak(voice)
-        // speech.
+          console.log({ voices });
+          // voice.voice = voices[1]
+          voice.onstart = () => console.log(44444444);
 
-        console.log({ speech, voice, voices });
+          let speech = speechSynthesis
+          speech.cancel()
+          speech.speak(voice)
+          // speech.
 
-      }
-    );
+          console.log({ speech, voice, voices });
+
+        }
+      );
+    }
+    let speech = speechSynthesis
+    speech.cancel()
+    speech.speak(voice)
+
   }
-  let speech = speechSynthesis
-        speech.cancel()
-        speech.speak(voice)
-
-}
 
 }

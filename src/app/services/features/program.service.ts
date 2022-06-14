@@ -6,7 +6,7 @@ import {
   getDoc, getDocs, query, QueryDocumentSnapshot,
   updateDoc, where
 } from '@angular/fire/firestore';
-import { from, of, Observable } from 'rxjs';
+import { from, of, zip, Observable, switchMap, zipAll } from 'rxjs';
 
 export interface Program {
   id?: string,
@@ -24,6 +24,7 @@ export interface Program {
   providedIn: 'root'
 })
 export class ProgramService {
+
   colRef: CollectionReference
   programs: Observable<QueryDocumentSnapshot<DocumentData> | null>
 
@@ -32,11 +33,11 @@ export class ProgramService {
     this.programs = of(null)
   }
 
-create(data: Program) {
+  create(data: Program) {
     let program = getDocs(query(this.colRef, where('Area', '==', this.areaService.selectedArea)))
     let area = this.areaService.getById(this.areaService.selectedArea)
     // if (program.size > area.capacity!) {
-      // return
+    // return
     // }
     let programData = { Area: this.areaService.selectedArea, ...data }
     return from(addDoc(this.colRef, programData).then(e => e))
@@ -58,6 +59,22 @@ create(data: Program) {
       }))
 
     return from(programs)
+  }
+
+  getTop(range: string) {
+    let attRef = collection(this.firestore, 'attendance')
+    return this.getAll().pipe(
+      switchMap(
+        e => zip(...e.map(e => getDocs(
+          query(attRef, where('programIdList', 'array-contains', e.id))
+        ).then( r => ({program: e, size: r.size}))
+        )
+        )
+
+      ),
+      // switchMap(e => e.map(r => ({ total: r.size, })))
+    )
+    throw new Error('Method not implemented.');
   }
 
   getById(id: string) {

@@ -1,3 +1,4 @@
+import { ChartistModule } from 'ng-chartist';
 import { AuthService } from './services/auth/auth.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -13,14 +14,15 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     provideFirebaseApp( () => initializeApp(environment.firebase)),
     provideFirestore( () => getFirestore()),
     provideAuth( () => getAuth()),
-    AppRoutingModule
+    AppRoutingModule,
+    ChartistModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
