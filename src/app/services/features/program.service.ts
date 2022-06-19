@@ -44,8 +44,10 @@ export class ProgramService {
   }
   update(id: string, program: Program) {
     // let updatedData =
+    console.log({program});
+    
     return from(updateDoc(doc(this.colRef, id), {
-      program
+      ...program
     }))
   }
 

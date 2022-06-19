@@ -15,7 +15,7 @@ export interface Computer {
   name: string,
   user: string,
   brand: string,
-  status: 'Disponible' | 'En Mantenimiento' | 'Rentado'
+  status: 'Disponible' | 'Mantenimiento' | 'Rentado'
 }
 
 @Injectable({
