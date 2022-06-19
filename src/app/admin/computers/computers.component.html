@@ -1,6 +1,12 @@
 <div class="min-h-full py-5 flex flex-col items-center">
     <h1 class="text-center text-xl font-bold">Computadoras</h1>
-    <div class="flex justify-center">
+    <div class="flex justify-center flex-col m-2">
+        <select name="filter" id="filter" class="rounded" (change)="filterComputers($event)">
+            <option value="">Todas</option>
+            <option value="Disponible">Disponibles</option>
+            <option value="Rentado">Rentadas</option>
+            <option value="Mantenimiento">En Mantenimiento</option>
+        </select>
         <button routerLink="create"
             class="bg-emerald-500 text-zinc-100 font-bold tracking-wider px-4 py-1 rounded my-3">Agregar</button>
     </div>
@@ -31,7 +37,7 @@
         </table> -->
 
         <!-- --- -->
-        <div *ngFor="let computer of computers" (click)="edit(computer)" class="card bg-zinc-200 drop-shadow rounded-sm m-2 p-3 hover:cursor-pointer min-w-[120px]">
+        <div *ngFor="let computer of filteredComputers" (click)="edit(computer)" class="card bg-zinc-200 drop-shadow rounded-sm m-2 p-3 hover:cursor-pointer min-w-[120px]">
             <h2 class="tracking-wider font-bold">{{computer.name}}</h2>
             <p class="italic tracking-wider">{{computer.user}}</p>
             <div class="flex flex-col p-3">
@@ -41,7 +47,10 @@
             </div>
 
             <p
-            [ngClass]="{'bg-green-700': computer.status == 'Disponible','bg-orange-700': computer.status == 'En Mantenimiento'} "
+            [ngClass]="{
+                'bg-green-700': computer.status == 'Disponible',
+                'bg-orange-700': computer.status == 'Mantenimiento'
+            } "
             class="px-2 py-1 m-1 text-center rounded text-zinc-100 font-semibold"
             >{{computer.status}}</p>
         </div>
