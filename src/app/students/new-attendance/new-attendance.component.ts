@@ -110,11 +110,11 @@ export class NewAttendanceComponent implements OnInit {
       return
     this.areaService.setSelectedArea(areaSelected.id!)
     if (!areaSelected.computers)
-      this.materialService.getAll().subscribe(res => {
+      this.materialService.getAllActive().subscribe(res => {
         this.materials = res
       })
     else
-      this.programService.getAll().subscribe(res => {
+      this.programService.getAllActive().subscribe(res => {
         this.programs = res
       })
   }

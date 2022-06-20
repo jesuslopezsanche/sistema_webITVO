@@ -63,7 +63,7 @@ export class AttendanceService {
     console.log(date1, date2);
 
 
-    let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2))))
+    let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2)),where('area.id', '==', this.areaService.selectedArea)))
       .then(e => e.docs)
       .then(e => e.map(el => {
         return { id: el.id, ...el.data() } as unknown as Attendance

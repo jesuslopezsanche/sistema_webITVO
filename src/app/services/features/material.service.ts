@@ -61,6 +61,17 @@ create(data: Material) {
 
     return from(materials)
   }
+  getAllActive() {
+    console.log("getting active materials for", this.areaService.selectedArea);
+
+    let materials = getDocs(query(this.colRef, where('Area', '==', this.areaService.selectedArea),where('status', '==', 'Disponible')))
+      .then(e => e.docs)
+      .then(e => e.map(el => {
+        return { id: el.id, ...el.data() } as unknown as Material
+      }))
+
+    return from(materials)
+  }
 
   getTop(range: string) {
     let attRef = collection(this.firestore, 'attendance')
