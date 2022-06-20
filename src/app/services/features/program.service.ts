@@ -63,6 +63,18 @@ export class ProgramService {
     return from(programs)
   }
 
+  getAllActive() {
+    console.log("getting active programs for", this.areaService.selectedArea);
+
+    let programs = getDocs(query(this.colRef, where('Area', '==', this.areaService.selectedArea),where('status', '==','Habilitado')))
+      .then(e => e.docs)
+      .then(e => e.map(el => {
+        return { id: el.id, ...el.data() } as unknown as Program
+      }))
+
+    return from(programs)
+  }
+
   getTop(range: string) {
     let attRef = collection(this.firestore, 'attendance')
     return this.getAll().pipe(
