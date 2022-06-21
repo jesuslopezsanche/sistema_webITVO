@@ -21,12 +21,12 @@ export class AreaService {
   }
 
   colRef: CollectionReference
-  areas: Observable<QueryDocumentSnapshot<DocumentData> | null>
+  areas: Area[] | null
   selectedArea: string = ''
 
   constructor(private firestore: Firestore, private route: ActivatedRoute) {
     this.colRef = collection(firestore, 'areas')
-    this.areas = of(null)
+    this.areas = null
   }
 
   create(area: Area) {
@@ -41,9 +41,12 @@ export class AreaService {
   getAll() {
     let areas = getDocs(query(this.colRef))
       .then(e => e.docs)
-      .then(e => e.map(el => {
+      .then(e => {
+        this.areas = e.map(el => {
         return { id: el.id, ...el.data() } as unknown as Area
-      }))
+      })
+      return this.areas
+    })
 
     return from(areas)
   }

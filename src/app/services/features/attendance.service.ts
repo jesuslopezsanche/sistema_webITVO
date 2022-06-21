@@ -59,11 +59,32 @@ export class AttendanceService {
       }))
     return from(sessions)
   }
+  getAllAttendancesFromAllAreas() {
+    console.log('aalatenda', { u: this.areaService.selectedArea });
+
+    let sessions = getDocs(query(this.colRef, where('status', '==', 'closed')))
+      .then(e => e.docs)
+      .then(e => e.map(el => {
+        return { id: el.id, ...el.data() } as unknown as Attendance
+      }))
+    return from(sessions)
+  }
   getAllAttendancesInDate(date1: Date, date2: Date) {
     console.log(date1, date2);
 
 
     let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2)),where('area.id', '==', this.areaService.selectedArea)))
+      .then(e => e.docs)
+      .then(e => e.map(el => {
+        return { id: el.id, ...el.data() } as unknown as Attendance
+      }))
+    return from(sessions)
+  }
+  getAllAttendancesInDateFromAllAreas(date1: Date, date2: Date) {
+    console.log(date1, date2);
+
+
+    let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2))))
       .then(e => e.docs)
       .then(e => e.map(el => {
         return { id: el.id, ...el.data() } as unknown as Attendance
