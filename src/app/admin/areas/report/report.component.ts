@@ -1,5 +1,5 @@
 import { Career, CareerService } from './../../../services/features/career.service';
-import { switchMap } from 'rxjs';
+import { combineLatestWith, switchMap } from 'rxjs';
 import { Attendance, AttendanceService } from './../../../services/features/attendance.service';
 import { AreaService } from './../../../services/features/area.service';
 import { ChartType, ChartEvent } from 'ng-chartist';
@@ -30,12 +30,12 @@ export class ReportComponent implements OnInit {
     width: '100%', height: '55vh',
     labelInterpolationFnc: (val: any, i: number) => {
       let sum = (<number[]>this.careerChartData.series)
-      .reduce((a: any, b: any) => {
-        return a + b
+        .reduce((a: any, b: any) => {
+          return a + b
         })
-        return val + ': ' + (Math.round((<number>this.careerChartData.series[i] / sum) * 100)) + '%'
-      }
+      return val + ': ' + (Math.round((<number>this.careerChartData.series[i] / sum) * 100)) + '%'
     }
+  }
   startDate: string = ''
   endDate: string = ''
   attendance?: Attendance[]
@@ -48,25 +48,14 @@ export class ReportComponent implements OnInit {
       this.careers = r
       // this.selectedCareer = r[1].id!
     })
-    this.attendanceService.getAllAttendancesFromAllAreas().subscribe(r => {
-      console.log(this.areaService.areas);
-      let orderedByArea = this.areaService.areas?.map(area => ({ label: area.name, size: r.filter(a => a.area.id == area.id).length }))
-        .sort((a, b) => a.size - b.size)
-      console.log({ orderedByArea });
 
-      this.chartData = {
-        labels: orderedByArea!.map(r => r.label),
-        series: orderedByArea!.map(r => r.size ? r.size : 0.01),
-      }
-      this.attendance = r
-    })
-
-  }
-  queryDates() {
-    this.attendanceService.getAllAttendancesInDateFromAllAreas(new Date(this.startDate), new Date(this.endDate)).subscribe(
-      r => {
-        let orderedByArea = this.areaService.areas?.
-          map(area => ({ label: area.name, size: r.filter(a => a.area.id == area.id).length }))
+    this.areaService.areas.pipe(combineLatestWith(this.attendanceService.getAllAttendancesFromAllAreas()))
+      .subscribe(([areas, r]) => {
+        console.log({ areas });
+        if (!areas) {
+          return
+        }
+        let orderedByArea = areas?.map(area => ({ label: area.name, size: r.filter(a => a.area.id == area.id).length }))
           .sort((a, b) => a.size - b.size)
         console.log({ orderedByArea });
 
@@ -75,26 +64,52 @@ export class ReportComponent implements OnInit {
           series: orderedByArea!.map(r => r.size ? r.size : 0.01),
         }
         this.attendance = r
-      }
+      })
 
-    )
+
+  }
+  queryDates() {
+    this.areaService.areas.subscribe(areas => {
+      this.attendanceService.getAllAttendancesInDateFromAllAreas(new Date(this.startDate), new Date(this.endDate)).subscribe(
+        r => {
+          if (!r || areas?.length == 0) {
+            return
+          }
+          let orderedByArea = areas!.
+            map(area => ({ label: area.name, size: r.filter(a => a.area.id == area.id).length }))
+            .sort((a, b) => a.size - b.size)
+          console.log({ orderedByArea });
+
+
+          this.chartData = {
+            labels: orderedByArea!.map(r => r.label),
+            series: orderedByArea!.map(r => r.size ? r.size : 0.01),
+          }
+          this.attendance = r
+        }
+
+      )
+    })
+
 
   }
 
   filterByCareer() {
-    console.log(this.selectedCareer);
-    console.log(this.attendance);
+    this.areaService.areas.subscribe(areas => {
+      console.log(this.selectedCareer);
+      console.log(this.attendance);
 
-    let filteredbyCareer = this.attendance?.filter(e => e.student!.career.id == this.selectedCareer)
-    console.log({ byCareer: filteredbyCareer });
-    let orderedByArea = this.areaService.areas?.map(e => ({ label: e.name, size: filteredbyCareer!.filter(a => a.area.id == e.id).length }))
-      .sort((a, b) => a.size - b.size)
-    this.careerChartData = {
-      labels: orderedByArea!.map(r => r.label),
-      series: orderedByArea!.map(r => r.size ? r.size : 0.01),
-    }
-    console.log({ careerData: this.careerChartData });
+      let filteredbyCareer = this.attendance?.filter(e => e.student!.career.id == this.selectedCareer)
+      console.log({ byCareer: filteredbyCareer });
+      let orderedByArea = areas?.map(e => ({ label: e.name, size: filteredbyCareer!.filter(a => a.area.id == e.id).length }))
+        .sort((a, b) => a.size - b.size)
+      this.careerChartData = {
+        labels: orderedByArea!.map(r => r.label),
+        series: orderedByArea!.map(r => r.size ? r.size : 0.01),
+      }
+      console.log({ careerData: this.careerChartData });
 
+    })
   }
 
 }

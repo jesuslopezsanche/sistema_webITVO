@@ -9,7 +9,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class AreaNavigationComponent implements OnInit {
 
-  constructor(public route: ActivatedRoute, private areaService: AreaService) { }
+  constructor(public route: ActivatedRoute, public areaService: AreaService) { }
   @Input() id: Observable<string> = of('')
   ngOnInit(): void {
     let id = this.route.paramMap.subscribe(
