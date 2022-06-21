@@ -1,0 +1,27 @@
+<div class="py-4 flex flex-col min-h-[100%]">
+    <h1 class="text-center font-bold tracking-widest text-xl">Reportes</h1>
+    <div class="flex justify-center">
+        <input type="date" name="startDate" id="startDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" [(ngModel)]="startDate">
+        <input type="date" name="endDate" id="endDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" [(ngModel)]="endDate">
+        <button class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" (click)="queryDates()">Consultar</button>
+    </div>
+
+    <div class="flex justify-center items-center grow min-w-full">
+        
+        
+        <!-- <div class="min-w-[200px] min-h-[200px] rounded-full bg-blue-400"></div> -->
+        <x-chartist [type]="chartType" [data]="chartData" [options]="chartOptions" class="text-lg"></x-chartist>
+    </div>
+    <div class="flex justify-evenly py-4">
+        <div class="flex">
+            <label for="range" class="mx-2">Visitas a laboratorio por carrera:</label>
+            <select name="range" id="range" class="bg-zinc-100 mx-2 px-2 py-1" (change)="filterByCareer()" [(ngModel)]="selectedCareer">
+                <option value="" >Seleccione una carrera</option>
+                <option *ngFor="let career of careers" [value]="career.id" >{{career.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="flex justify-center items-center grow min-w-full">
+        <x-chartist [type]="chartType" [data]="careerChartData" [options]="chart2Options" class="text-lg"></x-chartist>
+    </div>
+</div>
