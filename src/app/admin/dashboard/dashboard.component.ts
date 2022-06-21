@@ -14,11 +14,13 @@ export class DashboardComponent implements OnInit {
   selectedId: Observable<string | null> = of(null)
   constructor(private authService: AuthService, private areaService: AreaService, private route: ActivatedRoute) {
     areaService.getAll().subscribe(areas => this.areas = areas)
-    this.selectedId = route.paramMap.pipe(take(1), switchMap(p => {
-      console.log({ pid: p.get('id') })
-      this.selectedId = of(p.get('id'))
-      return of(p.get('id'))
-    }))
+    let id = this.route.paramMap.subscribe(
+      e => {
+        let areaId=e.get('areaId')!
+        this.areaService.setSelectedArea(areaId)
+        return of(e.get('areaId'))
+      }
+    )
   }
 
   ngOnInit(): void {
