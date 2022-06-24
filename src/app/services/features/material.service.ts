@@ -4,7 +4,7 @@ import {
   addDoc, collection, CollectionReference,
   deleteDoc, doc, DocumentData, Firestore,
   getDoc, getDocs, query, QueryDocumentSnapshot,
-  updateDoc, where
+  updateDoc, where, Timestamp
 } from '@angular/fire/firestore';
 import { of, Observable, switchMap, zip, from } from 'rxjs';
 
@@ -78,7 +78,26 @@ create(data: Material) {
     return this.getAll().pipe(
       switchMap(
         e => zip(...e.map(e => getDocs(
-          query(attRef, where('materialIdList', 'array-contains', e.id))
+          query(attRef, where('area.id', '==', this.areaService.selectedArea), where('materialIdList', 'array-contains', e.id))
+        ).then( r => ({program: e, size: r.size}))
+        )
+        )
+
+      ),
+      // switchMap(e => e.map(r => ({ total: r.size, })))
+    )
+  }
+
+  getTopFromDate(date1 : Date, date2:Date) {
+    let attRef = collection(this.firestore, 'attendance')
+    console.log('fromdate', date1);
+    console.log('todate', date2);
+    console.log('area', this.areaService.selectedArea);
+    
+    return this.getAll().pipe(
+      switchMap(
+        e => zip(...e.map(e => getDocs(
+          query(attRef, where('area.id', '==', this.areaService.selectedArea), where('materialIdList', 'array-contains', e.id),where('startDateTime', '>', Timestamp.fromDate(date1)),where('startDateTime', '<', Timestamp.fromDate(date2)))
         ).then( r => ({program: e, size: r.size}))
         )
         )

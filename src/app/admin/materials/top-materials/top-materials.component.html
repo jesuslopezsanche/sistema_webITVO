@@ -1,6 +1,6 @@
 <div class="py-4 flex flex-col min-h-[100%]">
 
-    <div class="flex justify-evenly py-4">
+    <!-- <div class="flex justify-evenly py-4">
         <div class="flex">
             <label for="range" class="mx-2">Rango:</label>
             <select name="range" id="range" class="bg-zinc-100 mx-2 px-2 py-1">
@@ -10,6 +10,11 @@
             </select>
         </div>
         <button class="bg-zinc-100 mx-2 px-4 py-1">Consultar</button>
+    </div> -->
+    <div class="flex justify-center">
+        <input type="date" name="startDate" id="startDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" [(ngModel)]="startDate">
+        <input type="date" name="endDate" id="endDate" class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" [(ngModel)]="endDate">
+        <button class="mx-2 bg-zinc-100 px-2 py1 rounded-sm" (click)="queryDates()">Consultar</button>
     </div>
     <div class="flex justify-center items-center grow min-w-full">
 

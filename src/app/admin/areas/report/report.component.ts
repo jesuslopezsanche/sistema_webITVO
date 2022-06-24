@@ -61,7 +61,7 @@ export class ReportComponent implements OnInit {
 
         this.chartData = {
           labels: orderedByArea!.map(r => r.label),
-          series: orderedByArea!.map(r => r.size ? r.size : 0.01),
+          series: orderedByArea!.map(r => r.size ? r.size : 0.0001),
         }
         this.attendance = r
       })
@@ -83,7 +83,7 @@ export class ReportComponent implements OnInit {
 
           this.chartData = {
             labels: orderedByArea!.map(r => r.label),
-            series: orderedByArea!.map(r => r.size ? r.size : 0.01),
+            series: orderedByArea!.map(r => r.size ? r.size : 0.0001),
           }
           this.attendance = r
         }
@@ -105,7 +105,7 @@ export class ReportComponent implements OnInit {
         .sort((a, b) => a.size - b.size)
       this.careerChartData = {
         labels: orderedByArea!.map(r => r.label),
-        series: orderedByArea!.map(r => r.size ? r.size : 0.01),
+        series: orderedByArea!.map(r => r.size ? r.size : 0.0001),
       }
       console.log({ careerData: this.careerChartData });
 
