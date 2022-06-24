@@ -14,6 +14,9 @@ import { IChartistData, IPieChartOptions } from 'chartist';
   styleUrls: ['./top-materials.component.css']
 })
 export class TopMaterialsComponent implements OnInit {
+  startDate = ''
+  endDate = ''
+  computers = true
   chartType: ChartType = 'Pie'
   chartData: IChartistData = { labels: [1], series: [1] }
   event: ChartEvent = {}
@@ -24,7 +27,7 @@ export class TopMaterialsComponent implements OnInit {
         .reduce((a: any, b: any) => {
           return a + b
         })
-      return val + ': '+ (Math.round((<number>this.chartData.series[i] / sum ) * 100)) + '%'
+      return val + ': ' + (Math.round((<number>this.chartData.series[i] / sum) * 100)) + '%'
     }
   }
   form: FormGroup
@@ -45,8 +48,11 @@ export class TopMaterialsComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.pipe(switchMap(e => this.areaService.getById(e.get('areaId')!)),
       switchMap(e => {
-        if (e.computers)
+        if (e.computers) {
+          this.computers = true
           return this.programService.getTop('Diario')
+        }
+        this.computers = false
         return this.materialService.getTop('Diario')
       })).subscribe(r => {
         console.log({ top: r });
@@ -58,6 +64,35 @@ export class TopMaterialsComponent implements OnInit {
       }
 
       )
+  }
+  queryDates() {
+    if (this.computers) {
+
+      this.programService.getTopFromDate(new Date(this.startDate), new Date(this.endDate)).subscribe(
+        r => {
+          console.log({r});
+          
+          let labels = r.map(e => e.program.name)
+          let series = r.map(e => e.size < 1 ? 0.1 : e.size)
+          this.chartData = { labels, series }
+          console.log(this.chartData)
+        }
+
+      )
+    }
+    else{
+      this.materialService.getTopFromDate(new Date(this.startDate), new Date(this.endDate)).subscribe(
+        r => {
+          console.log({r});
+          
+          let labels = r.map(e => e.program.name)
+          let series = r.map(e => e.size < 1 ? 0.1 : e.size)
+          this.chartData = { labels, series }
+          console.log(this.chartData)
+        }
+
+      )
+    }
   }
 
 }
