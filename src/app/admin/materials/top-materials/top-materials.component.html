@@ -18,8 +18,17 @@
     </div>
     <div class="flex justify-center items-center grow min-w-full">
 
-
+        <div id="labels-container" >
+            <div id="label-color" class="flex" *ngFor="let item of labels.reverse()">
+                <div id="color" class="min-h-[2rem] min-w-[2rem] {{item.color}}">
+                    <svg width="20" height="20" class="{{item.color}}">
+                        <rect width="20" height="20" class="ct-slice-pie" />
+                      </svg>
+                </div>
+                <div id="label-text">{{item.name}} : {{item.value}}</div>
+            </div>
+        </div>
         <!-- <div class="min-w-[200px] min-h-[200px] rounded-full bg-blue-400"></div> -->
-        <x-chartist [type]="chartType" [data]="chartData" [options]="chartOptions" class="text-lg"></x-chartist>
+        <x-chartist [type]="chartType" [data]="chartData" [options]="chartOptions" class="text-lg relative"></x-chartist>
     </div>
 </div>

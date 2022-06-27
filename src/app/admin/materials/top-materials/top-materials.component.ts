@@ -7,6 +7,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { ChartEvent, ChartOptions, ChartType } from 'ng-chartist';
 import { IChartistData, IPieChartOptions } from 'chartist';
+import * as Chartist from 'chartist';
+import 'chartist-plugin-tooltips';
 
 @Component({
   selector: 'app-top-materials',
@@ -28,10 +30,11 @@ export class TopMaterialsComponent implements OnInit {
           return a + b
         })
       return val + ': ' + (Math.round((<number>this.chartData.series[i] / sum) * 100)) + '%'
-    }
+    },plugins: [Chartist.plugins.tooltip()],
   }
   form: FormGroup
   tabledata = []
+  labels = [{ name: '', color: '', value: 0 }]
   constructor(
     private programService: ProgramService,
     private materialService: MaterialService,
@@ -57,9 +60,17 @@ export class TopMaterialsComponent implements OnInit {
       })).subscribe(r => {
         console.log({ top: r });
         let labels = r.map(e => e.program.name)
-        let series = r.map(e => e.size < 1 ? 0.1 : e.size)
+        let series = r.map(e => e.size)
         this.chartData = { labels, series }
         console.log(this.chartData)
+        this.labels = (<[string]>this.chartData.labels)
+          .map((e: string, i: number) => (
+            {
+              name: e,
+              color: this.getColorClass(i),
+              value: <number>this.chartData.series[i]
+            }
+          ))
 
       }
 
@@ -73,8 +84,17 @@ export class TopMaterialsComponent implements OnInit {
           console.log({r});
           
           let labels = r.map(e => e.program.name)
-          let series = r.map(e => e.size < 1 ? 0.1 : e.size)
+          let series = r.map(e => e.size)
           this.chartData = { labels, series }
+          this.labels = (<[string]>this.chartData.labels)
+          .map((e: string, i: number) => (
+            {
+              name: e,
+              color: this.getColorClass(i),
+              value: <number>this.chartData.series[i]
+            }
+          ))
+
           console.log(this.chartData)
         }
 
@@ -86,13 +106,26 @@ export class TopMaterialsComponent implements OnInit {
           console.log({r});
           
           let labels = r.map(e => e.program.name)
-          let series = r.map(e => e.size < 1 ? 0.1 : e.size)
+          let series = r.map(e => e.size)
           this.chartData = { labels, series }
+          this.labels = (<[string]>this.chartData.labels)
+          .map((e: string, i: number) => (
+            {
+              name: e,
+              color: this.getColorClass(i),
+              value: <number>this.chartData.series[i]
+            }
+          ))
+
           console.log(this.chartData)
         }
 
       )
     }
+  }
+  getColorClass(i: number) {
+    return 'ct-series ct-series-' + String.fromCharCode(97 + i)
+
   }
 
 }
