@@ -1,9 +1,10 @@
+import { ExitMonitorGuard } from './../../guards/exit-monitor.guard';
 import { MonitorComponent } from './monitor.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {path: '', component: MonitorComponent}
+  {path: '', canDeactivate:[ExitMonitorGuard], component: MonitorComponent}
 ];
 
 @NgModule({
