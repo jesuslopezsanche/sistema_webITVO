@@ -33,6 +33,7 @@ export class AuthService {
   userLoggedIn: Boolean
   redirectUrl: string = ''
   user$: Observable<User | null>
+  adminConfirmed: boolean = false;
   constructor(private auth: Auth, private router: Router, private firestore: Firestore) {
     this.userLoggedIn = false
     this.user$ = authState(this.auth).pipe(
@@ -91,7 +92,7 @@ export class AuthService {
       }).catch(e => e as string)
   }
 
-  async loginEmail(user: any): Promise<any> {
+  async loginEmail(user: {email:string, password: string}): Promise<any> {
 
     try {
 
@@ -100,6 +101,7 @@ export class AuthService {
       this.userLoggedIn = true
       console.log({ login });
 
+      return login
       // this.router.navigate(['students'])
     } catch (error) {
       console.log('error', error);
