@@ -23,18 +23,11 @@ export class TopMaterialsComponent implements OnInit {
   chartData: IChartistData = { labels: [1], series: [1] }
   event: ChartEvent = {}
   chartOptions: IPieChartOptions = {
-    width: '100%', height: '55vh',
-    labelInterpolationFnc: (val: any, i: number) => {
-      let sum = (<number[]>this.chartData.series)
-        .reduce((a: any, b: any) => {
-          return a + b
-        })
-      return val + ': ' + (Math.round((<number>this.chartData.series[i] / sum) * 100)) + '%'
-    },plugins: [Chartist.plugins.tooltip()],
+    width: '100%', height: '55vh',plugins: [Chartist.plugins.tooltip()],
   }
   form: FormGroup
   tabledata = []
-  labels = [{ name: '', color: '', value: 0 }]
+  labels = [{ name: '', color: '', value: {meta:'', value:0} }]
   constructor(
     private programService: ProgramService,
     private materialService: MaterialService,
@@ -59,8 +52,10 @@ export class TopMaterialsComponent implements OnInit {
         return this.materialService.getTop('Diario')
       })).subscribe(r => {
         console.log({ top: r });
-        let labels = r.map(e => e.program.name)
-        let series = r.map(e => e.size)
+        let sum = r.map(e => e.size).reduce((a, b): number => a + b)
+        let labels = r.map((r, i) => Math.floor((r.size / sum) * 100) + '%')
+        let series = r.map(e => ({ meta: e.program.name + ': ', value: e.size }))
+        // .map(r => ({ meta: r.label + ': ', value: r.size }))
         this.chartData = { labels, series }
         console.log(this.chartData)
         this.labels = (<[string]>this.chartData.labels)
@@ -68,7 +63,7 @@ export class TopMaterialsComponent implements OnInit {
             {
               name: e,
               color: this.getColorClass(i),
-              value: <number>this.chartData.series[i]
+              value: <{meta:'',value:0}>this.chartData.series[i]
             }
           ))
 
@@ -91,7 +86,7 @@ export class TopMaterialsComponent implements OnInit {
             {
               name: e,
               color: this.getColorClass(i),
-              value: <number>this.chartData.series[i]
+              value: <{meta:'',value:0}>this.chartData.series[i]
             }
           ))
 
@@ -113,7 +108,7 @@ export class TopMaterialsComponent implements OnInit {
             {
               name: e,
               color: this.getColorClass(i),
-              value: <number>this.chartData.series[i]
+              value: <{meta:'',value:0}>this.chartData.series[i]
             }
           ))
 
