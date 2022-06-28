@@ -20,31 +20,19 @@ export class ReportComponent implements OnInit {
   event: ChartEvent = {}
   chartOptions: IPieChartOptions = {
     width: '100%', height: '55vh',
-    labelInterpolationFnc: (val: any, i: number) => {
-      let sum = (<number[]>this.chartData.series)
-        .reduce((a: any, b: any) => {
-          return a + b
-        })
-      return val + ': ' + (Math.round((<number>this.chartData.series[i] / sum) * 100)) + '%'
-    },
     plugins: [Chartist.plugins.tooltip()],
   }
   chart2Options: IPieChartOptions = {
     width: '100%', height: '55vh',
-    labelInterpolationFnc: (val: any, i: number) => {
-      let sum = (<number[]>this.careerChartData.series)
-        .reduce((a: any, b: any) => {
-          return a + b
-        })
-      return val + ': ' + (Math.round((<number>this.careerChartData.series[i] / sum) * 100)) + '%'
-    },plugins: [Chartist.plugins.tooltip()],
+    plugins: [Chartist.plugins.tooltip()],
   }
   startDate: string = ''
   endDate: string = ''
   attendance?: Attendance[]
   careers?: Career[]
   selectedCareer = ''
-  labels = [{ name: '', color: '', value: 0 }]
+  labels = [{ name: '', color: '', value: {meta:'', value:0} }]
+  data = [{ label: '', size: 0 }]
   constructor(private attendanceService: AttendanceService, private areaService: AreaService, private careerService: CareerService) { }
 
   ngOnInit(): void {
@@ -60,24 +48,26 @@ export class ReportComponent implements OnInit {
           return
         }
         let orderedByArea = areas?.map(area => ({ label: area.name, size: r.filter(a => a.area.id == area.id).length }))
-          .sort((a, b) => b.label.localeCompare(a.label))
+          .sort((a, b) => a.size - b.size)
         console.log({ orderedByArea });
-
+        let sum = orderedByArea!.map(e => e.size).reduce((a, b): number => a + b)
         this.chartData = {
-          labels: orderedByArea!.map(r => r.label),
-          series: orderedByArea!.map(r => r.size),
+          labels: orderedByArea!.map((r, i) => Math.floor((r.size / sum) * 100) + ' %'),
+          series: orderedByArea!.map(r => ({ meta: r.label + ': ', value: r.size })),
         }
         this.labels = (<[string]>this.chartData.labels)
           .map((e: string, i: number) => (
             {
               name: e,
               color: this.getColorClass(i),
-              value: <number>this.chartData.series[i]
+              value: <{meta:'',value:0}>this.chartData.series[i]
             }
           ))
         console.log({ labels: this.labels });
+        console.log({ data: this.chartData });
 
         this.attendance = r
+        this.data = orderedByArea
       })
 
 
@@ -91,15 +81,24 @@ export class ReportComponent implements OnInit {
           }
           let orderedByArea = areas!.
             map(area => ({ label: area.name, size: r.filter(a => a.area.id == area.id).length }))
-            .sort((a, b) => b.label.localeCompare(a.label))
+            .sort((a, b) => a.size - b.size)
           console.log({ orderedByArea });
+          let sum = orderedByArea!.map(e => e.size).reduce((a, b): number => a + b)
 
 
           this.chartData = {
-            labels: orderedByArea!.map(r => r.label),
-            series: orderedByArea!.map(r => r.size),
+            labels: orderedByArea!.map((r, i) => Math.floor((r.size / sum) * 100) + ' %'),
+            series: orderedByArea!.map(r => ({ meta: r.label + ': ', value: r.size })),
           }
-          this.labels = this.chartData.labels as []
+          this.labels = (<[string]>this.chartData.labels)
+          .map((e: string, i: number) => (
+            {
+              name: e,
+              color: this.getColorClass(i),
+              value: <{meta:'',value:0}>this.chartData.series[i]
+            }
+          ))
+          this.data = orderedByArea
           this.attendance = r
         }
 
@@ -116,12 +115,16 @@ export class ReportComponent implements OnInit {
 
       let filteredbyCareer = this.attendance?.filter(e => e.student!.career.id == this.selectedCareer)
       console.log({ byCareer: filteredbyCareer });
+      let sortingArr = this.data.map(e => e.label)
       let orderedByArea = areas?.map(e => ({ label: e.name, size: filteredbyCareer!.filter(a => a.area.id == e.id).length }))
-        .sort((a, b) => b.label.localeCompare(a.label))
+        .sort((a, b) => sortingArr.indexOf(a.label)-sortingArr.indexOf(b.label))
+      let sum = orderedByArea!.map(e => e.size).reduce((a, b): number => a + b)
+
       this.careerChartData = {
-        labels: orderedByArea!.map(r => r.label),
-        series: orderedByArea!.map(r => r.size),
+        labels: orderedByArea!.map((r, i) => Math.floor((r.size / sum) * 100) + ' %'),
+        series: orderedByArea!.map(r => ({ meta: r.label + ': ', value: r.size })),
       }
+      this.data = orderedByArea!
       console.log({ careerData: this.careerChartData });
 
     })
