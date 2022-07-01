@@ -78,8 +78,9 @@ export class TopMaterialsComponent implements OnInit {
         r => {
           console.log({r});
           
-          let labels = r.map(e => e.program.name)
-          let series = r.map(e => e.size)
+          let sum = r.map(e => e.size).reduce((a, b): number => a + b)
+          let labels = r.map((r, i) => Math.floor((r.size / sum) * 100) + '%')
+          let series = r.map(e => ({ meta: e.program.name + ': ', value: e.size }))
           this.chartData = { labels, series }
           this.labels = (<[string]>this.chartData.labels)
           .map((e: string, i: number) => (
