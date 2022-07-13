@@ -36,6 +36,8 @@ export class LoginComponent implements OnInit {
   }
 
   async login() {
+    console.log(this.loginForm);
+    
     if (this.loginForm.invalid)
       return alert('Debes proveer tu email y contraseña.')
 
