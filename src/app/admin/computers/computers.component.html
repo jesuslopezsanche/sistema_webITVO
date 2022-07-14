@@ -49,9 +49,10 @@
             <p
             [ngClass]="{
                 'bg-green-700': computer.status == 'Disponible',
-                'bg-orange-700': computer.status == 'Mantenimiento'
+                'bg-orange-500': computer.status == 'Mantenimiento',
+                'bg-red-700': computer.status == 'Rentado'
             } "
-            class="px-2 py-1 m-1 text-center rounded bg-gray-400 text-zinc-100 font-semibold"
+            class="px-2 py-1 m-1 text-center rounded text-zinc-100 font-semibold"
             >{{computer.status}}</p>
         </div>
 
