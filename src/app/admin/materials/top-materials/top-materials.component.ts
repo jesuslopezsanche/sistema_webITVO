@@ -89,20 +89,21 @@ export class TopMaterialsComponent implements OnInit {
               color: this.getColorClass(i),
               value: <{meta:'',value:0}>this.chartData.series[i]
             }
-          ))
-
-          console.log(this.chartData)
-        }
-
-      )
-    }
-    else{
-      this.materialService.getTopFromDate(new Date(this.startDate), new Date(this.endDate)).subscribe(
-        r => {
-          console.log({r});
+            ))
+            
+            console.log(this.chartData)
+          }
           
-          let labels = r.map(e => e.program.name)
-          let series = r.map(e => e.size)
+          )
+        }
+        else{
+          this.materialService.getTopFromDate(new Date(this.startDate), new Date(this.endDate)).subscribe(
+            r => {
+              console.log({r});
+              
+              let sum = r.map(e => e.size).reduce((a, b): number => a + b)
+              let labels = r.map((r, i) => Math.floor((r.size / sum) * 100) + '%')
+              let series = r.map(e => ({ meta: e.program.name + ': ', value: e.size }))
           this.chartData = { labels, series }
           this.labels = (<[string]>this.chartData.labels)
           .map((e: string, i: number) => (

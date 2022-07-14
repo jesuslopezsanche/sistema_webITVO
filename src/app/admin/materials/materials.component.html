@@ -1,6 +1,12 @@
 <div class="min-h-full py-5 flex flex-col items-center">
     <h1 class="text-center text-xl font-bold">Inventario</h1>
-    <div class="flex justify-center">
+    <div class="flex flex-col justify-center">
+        <select name="filter" id="filter" class="rounded" (change)="filterMaterials($event)">
+            <option value="">Todas</option>
+            <option value="Disponible">Disponible</option>
+            <option value="Rentado">Rentado</option>
+            <option value="Mantenimiento">Mantenimiento</option>
+        </select>
         <button routerLink="create" class="bg-emerald-500 text-zinc-100 font-bold tracking-wider px-4 py-1 rounded my-3">Agregar</button>
     </div>
     <div class="min-w-full flex justify-center">
@@ -17,7 +23,7 @@
                 </tr>
             </thead>
             <tbody class="text-center">
-                <tr *ngFor="let material of materials" (click)="edit(material)" class="cursor-pointer border-b-2 border-zinc-300 hover:bg-zinc-200">
+                <tr *ngFor="let material of filteredMaterials" (click)="edit(material)" class="cursor-pointer border-b-2 border-zinc-300 hover:bg-zinc-200">
                     <td class="py-1">{{material['serialNumber']}}</td>
                     <td class="py-1">{{material['name']}}</td>
                     <td class="py-1">{{material['quantity']}}</td>
