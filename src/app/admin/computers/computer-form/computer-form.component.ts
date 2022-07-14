@@ -5,6 +5,7 @@ import { Material, MaterialService } from '../../../services/features/material.s
 import { Observable, of } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { LowerCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-material-form',
@@ -13,6 +14,7 @@ import { Component, OnInit } from '@angular/core';
 export class ComputerFormComponent implements OnInit {
 
 
+  lowerCasePipe = new LowerCasePipe()
   action = 'Crear'
   form: FormGroup
   selectedId: string | null = ''
@@ -50,8 +52,15 @@ export class ComputerFormComponent implements OnInit {
         })
       this.action = 'Editar'
     }
+    this.form.get('user')?.valueChanges.subscribe((name:string) =>{
+      console.log(this.lowerCasePipe.transform(name))
+      if( this.lowerCasePipe.transform(name) != name)
+      this.form.patchValue({user: this.lowerCasePipe.transform(name)})
+      
+    })
 
   }
+  
 
   back() {
     this.router.navigate(['../'], { relativeTo: this.route })

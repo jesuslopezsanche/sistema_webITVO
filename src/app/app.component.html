@@ -1,13 +1,19 @@
 <div class="min-h-screen max-h-screen flex flex-col">
     <div class="header flex justify-between min-w-full p-6">
-        <img routerLink="/students" src="assets/itvo.ico" class="h-[15vh] min-h-[100px] max-h-[150px] cursor-pointer" alt="">
+        <img *ngIf="router.url != '/monitor'" routerLink="/students" src="assets/itvo.ico" class="h-[15vh] min-h-[100px] max-h-[150px] cursor-pointer" alt="">
+        <img *ngIf="router.url == '/monitor'" src="assets/itvo.ico" class="h-[15vh] min-h-[100px] max-h-[150px] cursor-pointer" alt="">
         <div class="options flex flex-col justify-center">
             <h1 class="font-medium leading-tight text-4xl mt-0 mb-2 text-blue-600 mx-10 text-center">
                 Sistema de acceso a laboratorios <br>ITVO
             </h1>
         </div>
-        <div class="options flex flex-col justify-center">
-            <a *ngIf="authService.isLoggedIn()" (click)="authService.logout()" class="cursor-pointer text-red-400 font-bold">
+        <div class="flex flex-col items-center">
+            <img *ngIf="router.url != '/monitor'" routerLink="/students" src="assets/images/logo.jpeg" class="h-[15vh] min-h-[100px] max-h-[150px] cursor-pointer" alt="">
+            <img *ngIf="router.url == '/monitor'" src="assets/images/logo.jpeg" class="h-[15vh] min-h-[100px] max-h-[150px] cursor-pointer" alt="">
+
+            <div class="options flex flex-col justify-center">
+        </div>
+            <a *ngIf="authService.isLoggedIn() && router.url != '/monitor'" (click)="authService.logout()" class="cursor-pointer text-red-400 font-bold">
                 Salir
             </a>
 
