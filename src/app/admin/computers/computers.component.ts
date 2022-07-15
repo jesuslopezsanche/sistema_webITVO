@@ -1,3 +1,4 @@
+import { AreaService } from './../../services/features/area.service';
 import { Computer, ComputerService } from './../../services/features/computer.service';
 import { DocumentData } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,8 +14,9 @@ export class ComputersComponent implements OnInit {
   filteredComputers: Computer[] | null = null
   selectedComputer: string = ''
   filter: 'Disponible' | 'Rentado' | 'Mantenimiento' | '' = ''
+  maxCapacity = false
 
-  constructor(private computerService: ComputerService, private router: Router, private route: ActivatedRoute) {
+  constructor(private computerService: ComputerService, private router: Router, private route: ActivatedRoute, public areaService : AreaService) {
   }
 
   ngOnInit(): void {
@@ -48,6 +50,9 @@ export class ComputersComponent implements OnInit {
     this.computerService.getAll().subscribe(e => {
       this.computers = e
       this.filteredComputers = e
+      this.maxCapacity = this.areaService.currentArea?.capacity! <= this.computers.length
+      console.log(this.maxCapacity);
+      
     })
   }
 

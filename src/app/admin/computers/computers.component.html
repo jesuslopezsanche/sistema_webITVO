@@ -7,7 +7,7 @@
             <option value="Rentado">Rentadas</option>
             <option value="Mantenimiento">En Mantenimiento</option>
         </select>
-        <button routerLink="create"
+        <button *ngIf="!maxCapacity" routerLink="create"
             class="bg-emerald-500 text-zinc-100 font-bold tracking-wider px-4 py-1 rounded my-3">Agregar</button>
     </div>
     <div class="min-w-full flex flex-wrap justify-center">
