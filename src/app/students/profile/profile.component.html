@@ -2,7 +2,7 @@
     <h1 class="font-bold text-xl">Datos del estudiante</h1>
     <form action="" id="loginform" class="flex flex-col max-w-[90%] my-2" [formGroup]="profileForm" (ngSubmit)="updateStudentProfile()">
         <input type="text" placeholder="Nombre" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="name">
-        <input type="text" placeholder="Número de control" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="controlNumber" [disabled]="!!profile">
+        <input type="text" placeholder="Número de control" class="max-w-lg my-2 pl-2 bg-gray-200" formControlName="controlNumber">
         <select name="career" id="career" class="max-w-lg my-2 pl-2 bg-gray-200 text-gray-700" formControlName="career" [compareWith]="compareCareer">
             <option value="">Selecciona tu carrera</option>
             <option *ngFor="let careerOpt of careers" [ngValue]="careerOpt">{{careerOpt.name}}</option>

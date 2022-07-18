@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
     private router: Router) {
     this.profileForm = fb.group({
       name: ['', [Validators.required]],
-      controlNumber: [{value: '', disabled: true}, [Validators.required]],
+      controlNumber: ['', [Validators.required]],
       career: ['', [Validators.required]],
       semester: ['', [Validators.required]],
     })
@@ -39,6 +39,7 @@ export class ProfileComponent implements OnInit {
           return console.log('new profile');
 
         }
+        this.profileForm.get('controlNumber')?.disable()
         let { uid, ...profile } = p
         console.log(profile);
 
