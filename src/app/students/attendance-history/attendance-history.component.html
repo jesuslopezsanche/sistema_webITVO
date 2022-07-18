@@ -1,6 +1,6 @@
 <!-- <p>attendance-history works!</p> -->
 <div class="flex flex-col">
-    <div class="attendance flex justify-evenly text-center">
+    <div class="attendance flex justify-evenly text-center font-bold">
         <p>
             Sala
 
@@ -12,15 +12,15 @@
             Salida
         </p>
     </div>
-    <div class="attendance flex justify-evenly" *ngFor="let attendance of attendanceHistory">
-        <p>
+    <div class="attendance flex justify-evenly my-1 drop-shadow-sm " *ngFor="let attendance of attendanceHistory">
+        <p class="max-w-[25%]">
             {{attendance.area.name}}
 
         </p>
-        <p>
+        <p class="max-w-[25%]">
             {{attendance.startDateTime?.toDate()?.toLocaleString()}}
         </p>
-        <p>
+        <p class="max-w-[25%]">
             {{attendance.endDateTime?.toDate()?.toLocaleString()}}
         </p>
     </div>
