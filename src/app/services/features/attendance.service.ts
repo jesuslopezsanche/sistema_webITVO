@@ -73,7 +73,7 @@ export class AttendanceService {
     console.log(date1, date2);
 
 
-    let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2)),where('area.id', '==', this.areaService.selectedArea)))
+    let sessions = getDocs(query(this.colRef, where('startDateTime', '>', Timestamp.fromDate(date1)), where('startDateTime', '<', Timestamp.fromDate(date2)), where('area.id', '==', this.areaService.selectedArea)))
       .then(e => e.docs)
       .then(e => e.map(el => {
         return { id: el.id, ...el.data() } as unknown as Attendance
@@ -204,12 +204,14 @@ export class AttendanceService {
     }
     if (attendanceData.status == 'registered') {
 
+      let message = `Se ha registrado tu salida de: ${attendanceData.area.name}`
       console.log('registered');
       if (!confirm('¿Confirma que quiere registrar su salida?'))
         return 0
       attendanceData.endDateTime = datetime
       attendanceData.status = 'closed'
       if (attendanceData.computer) {
+        message = `Se ha registrado tu salida de la sala: ${attendanceData.area.name}`
 
         let computer = attendanceData.computer!
         console.log('primer status');
@@ -219,7 +221,7 @@ export class AttendanceService {
         this.computerService.update(attendanceData.computer?.id!, computer).subscribe(r => console.log('computadora disponible', computer))
       }
       let res = await setDoc(doc(this.colRef, attendanceData.id), attendanceData)
-      this.say(`Se ha registrado tu salida de la sala: ${attendanceData.area.name}`)
+      this.say(message)
       return of(res)
     }
     console.log('not open');

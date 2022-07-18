@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
     private router: Router) {
     this.profileForm = fb.group({
       name: ['', [Validators.required]],
-      controlNumber: ['', [Validators.required]],
+      controlNumber: [{value: '', disabled: true}, [Validators.required]],
       career: ['', [Validators.required]],
       semester: ['', [Validators.required]],
     })
@@ -89,5 +89,7 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['students'])
 
   }
-
+  compareCareer(val1:Career, val2:Career) {
+    return val1.id === val2.id;
+  }
 }
