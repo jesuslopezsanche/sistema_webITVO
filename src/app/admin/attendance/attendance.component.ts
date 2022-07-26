@@ -15,7 +15,7 @@ export class AttendanceComponent implements OnInit {
   startDate: Date = new Date()
   endDate: Date = new Date()
 
-  constructor(private attendanceService: AttendanceService, private areaService: AreaService, private router: Router, private route: ActivatedRoute) {
+  constructor(private attendanceService: AttendanceService, public areaService: AreaService, private router: Router, private route: ActivatedRoute) {
     route.params.subscribe(r => {
       if (r['areaId']) {
         areaService.setSelectedArea(r['areaId'])
@@ -32,6 +32,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
   edit(area: any) {
     console.log(area);

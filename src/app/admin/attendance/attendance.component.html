@@ -11,6 +11,8 @@
             <thead class="border-b-2 border-gray-300 border-dotted">
                 <tr>
                     
+                    <th class="py-2 pt-4" *ngIf="areaService.currentArea?.computers">Computadora</th>
+                    <th class="py-2 pt-4" *ngIf="!areaService.currentArea?.computers">Computadora</th>
                     <th class="py-2 pt-4">Número de control</th>
                     <th class="py-2 pt-4">Nombre</th>
                     <th class="py-2 pt-4">Carrera</th>
@@ -20,6 +22,8 @@
             </thead>
             <tbody class="text-center">
                 <tr *ngFor="let attendant of attendants" (click)="edit(attendant)" class="cursor-pointer border-b-2 border-zinc-300 hover:bg-zinc-200">
+                    <td *ngIf="areaService.currentArea?.computers" class="py-1">{{attendant.computer?.user}}</td>
+                    <td *ngIf="!areaService.currentArea?.computers" class="py-1"><span *ngFor="let item of attendant.materialList; let i = index">{{item.name+(i == attendant.materialList!.length -1? '':', ')}}</span></td>
                     <td class="py-1">{{attendant.student?.controlNumber}}</td>
                     <td class="py-1">{{attendant.student?.name}}</td>
                     <td class="py-1">{{attendant.student?.career?.name}}</td>
