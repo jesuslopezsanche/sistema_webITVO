@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import '../node_modules/chartist/dist/chartist.css';
+@import '../node_modules/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.css';
 @tailwind  base;
 @tailwind components;
 @tailwind utilities;
