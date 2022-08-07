@@ -32,6 +32,7 @@ export class ComputerFormComponent implements OnInit {
       user: ['', Validators.required],
       brand: ['', Validators.required],
       status: ['Excelente', Validators.required],
+      description: [''],
     })
     this.currElement = of(null)
 
@@ -42,12 +43,13 @@ export class ComputerFormComponent implements OnInit {
     if (this.selectedId) {
       this.computerService.getById(this.selectedId).
         then(e => {
-          this.form.setValue({
+          this.form.patchValue({
             serialNumber: e.serialNumber,
             name: e.name,
             user: e.user,
             brand: e.brand,
-            status: e.status
+            status: e.status,
+            description: e.description,
           })
         })
       this.action = 'Editar'
@@ -78,6 +80,7 @@ export class ComputerFormComponent implements OnInit {
         user: this.form.get('user')?.value,
         brand: this.form.get('brand')?.value,
         status: this.form.get('status')?.value,
+        description: this.form.get('description')?.value,
       }
       if (this.action == "Crear") {
 
