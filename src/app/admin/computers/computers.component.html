@@ -37,7 +37,7 @@
         </table> -->
 
         <!-- --- -->
-        <div *ngFor="let computer of filteredComputers" (click)="edit(computer)" class="card bg-zinc-200 drop-shadow rounded-sm m-2 p-3 hover:cursor-pointer min-w-[120px] max-w-[200px] max-h-[250px]">
+        <div *ngFor="let computer of filteredComputers" (click)="edit(computer)" class="flex flex-col justify-evenly card bg-zinc-200 drop-shadow rounded-sm m-2 p-3 hover:cursor-pointer min-w-[120px] max-w-[200px] max-h-[250px]">
             <h2 class="tracking-wider font-bold">{{computer.name}}</h2>
             <p class="italic tracking-wider">{{computer.user}}</p>
             <div class="flex flex-col p-3">
@@ -46,6 +46,7 @@
                 <p class="tracking-wide">Marca: <span class="italic tracking-wider font-bold text-sm">{{computer.brand}}</span></p>
             </div>
             
+            <p *ngIf="computer.status == 'Mantenimiento'" class="tracking-wide text-zinc-500 text-sm max-h-[60px] overflow-y-auto">Descripción: <br><span class="italic tracking-wider font-bold text-xs">{{computer.description}}</span></p>
             <p
             [ngClass]="{
                 'bg-green-700': computer.status == 'Disponible',
@@ -54,7 +55,6 @@
             } "
             class="px-2 py-1 m-1 text-center rounded text-zinc-100 font-semibold"
             >{{computer.status}}</p>
-            <p *ngIf="computer.status == 'Mantenimiento'" class="tracking-wide text-zinc-500 text-sm max-h-[40px] overflow-y-scroll">Descripción: <br><span class="italic tracking-wider font-bold text-xs">{{computer.description}}</span></p>
         </div>
 
 
